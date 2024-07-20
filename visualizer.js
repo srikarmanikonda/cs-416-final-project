@@ -1,38 +1,42 @@
 document.addEventListener('DOMContentLoaded', function() {
-    d3.csv('narrative_viz_electric_vehicles.csv').then(function(data) {
-        console.log('CSV data loaded successfully:', data);
-        
-        data.forEach(d => {
-            d['Electric Range'] = +d['Electric Range'] || 0; // Ensure numerical values and handle possible non-numeric entries
-            d['Base MSRP'] = +d['Base MSRP'] || 0;
-        });
+    const vehicleTypesData = [
+        { key: 'Sedan', value: 120 },
+        { key: 'SUV', value: 80 },
+        { key: 'Truck', value: 40 },
+        { key: 'Coupe', value: 30 }
+    ];
 
-        renderVehicleTypes(data);
-        renderElectricRange(data);
-        renderBaseMsrp(data);
-    }).catch(function(error) {
-        console.error('Error loading the CSV file:', error);
-    });
+    const electricRangeData = [
+        { key: 'Model S', value: 370 },
+        { key: 'Model 3', value: 350 },
+        { key: 'Leaf', value: 226 },
+        { key: 'Bolt', value: 259 }
+    ];
+
+    const baseMsrpData = [
+        { key: 'Model S', value: 79990 },
+        { key: 'Model 3', value: 39990 },
+        { key: 'Leaf', value: 31990 },
+        { key: 'Bolt', value: 36990 }
+    ];
+
+    renderVehicleTypes(vehicleTypesData);
+    renderElectricRange(electricRangeData);
+    renderBaseMsrp(baseMsrpData);
 
     function renderVehicleTypes(data) {
         console.log('Rendering vehicle types');
-        
-        const vehicleTypesData = Array.from(d3.rollup(data, v => v.length, d => d['Electric Vehicle Type']), ([key, value]) => ({ key, value }));
-        createBarChart('#vehicle-types-viz', vehicleTypesData, 'Electric Vehicle Type', 'Count', false, 'Distribution of Electric Vehicle Types');
+        createBarChart('#vehicle-types-viz', data, 'Electric Vehicle Type', 'Count', false, 'Distribution of Electric Vehicle Types');
     }
 
     function renderElectricRange(data) {
         console.log('Rendering electric range');
-        
-        const electricRangeData = data.map(d => ({ key: d.Model, value: d['Electric Range'] }));
-        createBarChart('#electric-range-viz', electricRangeData, 'Model', 'Electric Range', true, 'Electric Range of Various Models');
+        createBarChart('#electric-range-viz', data, 'Model', 'Electric Range', true, 'Electric Range of Various Models');
     }
 
     function renderBaseMsrp(data) {
         console.log('Rendering base MSRP');
-        
-        const baseMsrpData = data.map(d => ({ key: d.Model, value: d['Base MSRP'] }));
-        createBarChart('#base-msrp-viz', baseMsrpData, 'Model', 'Base MSRP', true, 'Base MSRP of Electric Vehicles');
+        createBarChart('#base-msrp-viz', data, 'Model', 'Base MSRP', true, 'Base MSRP of Electric Vehicles');
     }
 
     function createBarChart(container, data, xLabel, yLabel, isHorizontal = false, title) {
@@ -62,8 +66,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         g.selectAll('.bar').data(data).enter().append('rect').attr('class', 'bar')
             .attr(isHorizontal ? 'y' : 'x', d => isHorizontal ? y(d.key) : x(d.key))
-            .attr(isHorizontal ? 'x' : 'y', d => isHorizontal ? x(d.value) : y(d.value))
-            .attr(isHorizontal ? 'width' : 'height', d => isHorizontal ? width - x(d.value) : height - y(d.value))
+            .attr(isHorizontal ? 'x' : 'y', d => isHorizontal ? x(0) : y(d.value))
+            .attr(isHorizontal ? 'width' : 'height', d => isHorizontal ? x(d.value) : height - y(d.value))
             .attr(isHorizontal ? 'height' : 'width', y.bandwidth());
 
         g.append('text').attr('class', 'axis-label').attr('x', width / 2).attr('y', height + margin.bottom)
