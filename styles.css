@@ -59,6 +59,7 @@ main {
     display: flex;
     justify-content: space-around;
     gap: 10px;
+    margin-bottom: 20px;
 }
 
 .buttons a {
@@ -86,12 +87,23 @@ main {
     margin-top: 20px;
 }
 
-.scene {
-    display: none;
+.navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
 }
 
-.scene:target {
-    display: block;
+.navigation a {
+    background: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background 0.3s ease;
+}
+
+.navigation a:hover {
+    background: #0056b3;
 }
 
 .bar {

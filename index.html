@@ -26,27 +26,37 @@
             </ul>
         </section>
         
-        <section class="narrative-section buttons">
+        <nav class="buttons">
             <a href="#scene1" id="scene1-btn">Scene 1: Vehicle Types</a>
             <a href="#scene2" id="scene2-btn">Scene 2: Electric Range</a>
             <a href="#scene3" id="scene3-btn">Scene 3: Base MSRP</a>
+        </nav>
+
+        <section id="scene1" class="narrative-section scene">
+            <h2>Vehicle Types</h2>
+            <p>This scene shows the distribution of different types of electric vehicles in the dataset.</p>
+            <svg id="vehicle-types-viz" class="visualization"></svg>
+            <div class="navigation">
+                <a href="#scene2">Next</a>
+            </div>
         </section>
-        
-        <section class="narrative-section" id="scene-container">
-            <div id="scene1" class="scene">
-                <h2>Vehicle Types</h2>
-                <p>This scene shows the distribution of different types of electric vehicles in the dataset.</p>
-                <svg id="vehicle-types-viz"></svg>
+
+        <section id="scene2" class="narrative-section scene">
+            <h2>Electric Range</h2>
+            <p>This scene illustrates the electric range of various electric vehicles.</p>
+            <svg id="electric-range-viz" class="visualization"></svg>
+            <div class="navigation">
+                <a href="#scene1">Previous</a>
+                <a href="#scene3">Next</a>
             </div>
-            <div id="scene2" class="scene">
-                <h2>Electric Range</h2>
-                <p>This scene illustrates the electric range of various electric vehicles.</p>
-                <svg id="electric-range-viz"></svg>
-            </div>
-            <div id="scene3" class="scene">
-                <h2>Base MSRP</h2>
-                <p>This scene shows the base MSRP of electric vehicles, highlighting the affordability and premium segments.</p>
-                <svg id="base-msrp-viz"></svg>
+        </section>
+
+        <section id="scene3" class="narrative-section scene">
+            <h2>Base MSRP</h2>
+            <p>This scene shows the base MSRP of electric vehicles, highlighting the affordability and premium segments.</p>
+            <svg id="base-msrp-viz" class="visualization"></svg>
+            <div class="navigation">
+                <a href="#scene2">Previous</a>
             </div>
         </section>
     </main>

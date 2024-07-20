@@ -3,8 +3,8 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('CSV data loaded successfully:', data);
         
         data.forEach(d => {
-            d['Electric Range'] = +d['Electric Range'];
-            d['Base MSRP'] = +d['Base MSRP'];
+            d['Electric Range'] = +d['Electric Range'] || 0; // Ensure numerical values and handle possible non-numeric entries
+            d['Base MSRP'] = +d['Base MSRP'] || 0;
         });
 
         renderVehicleTypes(data);
@@ -17,21 +17,21 @@ document.addEventListener('DOMContentLoaded', function() {
     function renderVehicleTypes(data) {
         console.log('Rendering vehicle types');
         
-        const vehicleTypesData = Array.from(d3.rollup(data, v => v.length, d => d['Electric Vehicle Type']));
+        const vehicleTypesData = Array.from(d3.rollup(data, v => v.length, d => d['Electric Vehicle Type']), ([key, value]) => ({ key, value }));
         createBarChart('#vehicle-types-viz', vehicleTypesData, 'Electric Vehicle Type', 'Count', false, 'Distribution of Electric Vehicle Types');
     }
 
     function renderElectricRange(data) {
         console.log('Rendering electric range');
         
-        const electricRangeData = data.map(d => ({ model: d.Model, range: d['Electric Range'] }));
+        const electricRangeData = data.map(d => ({ key: d.Model, value: d['Electric Range'] }));
         createBarChart('#electric-range-viz', electricRangeData, 'Model', 'Electric Range', true, 'Electric Range of Various Models');
     }
 
     function renderBaseMsrp(data) {
         console.log('Rendering base MSRP');
         
-        const baseMsrpData = data.map(d => ({ model: d.Model, msrp: d['Base MSRP'] }));
+        const baseMsrpData = data.map(d => ({ key: d.Model, value: d['Base MSRP'] }));
         createBarChart('#base-msrp-viz', baseMsrpData, 'Model', 'Base MSRP', true, 'Base MSRP of Electric Vehicles');
     }
 
@@ -54,16 +54,16 @@ document.addEventListener('DOMContentLoaded', function() {
             y = d3.scaleLinear().range([height, 0]);
         }
 
-        x.domain(isHorizontal ? [0, d3.max(data, d => d[1])] : data.map(d => d[0]));
-        y.domain(isHorizontal ? data.map(d => d[0]) : [0, d3.max(data, d => d[1])]);
+        x.domain(isHorizontal ? [0, d3.max(data, d => d.value)] : data.map(d => d.key));
+        y.domain(isHorizontal ? data.map(d => d.key) : [0, d3.max(data, d => d.value)]);
 
         g.append('g').attr('class', 'x axis').attr('transform', `translate(0,${height})`).call(d3.axisBottom(x));
         g.append('g').attr('class', 'y axis').call(d3.axisLeft(y));
 
         g.selectAll('.bar').data(data).enter().append('rect').attr('class', 'bar')
-            .attr(isHorizontal ? 'y' : 'x', d => isHorizontal ? y(d[0]) : x(d[0]))
-            .attr(isHorizontal ? 'x' : 'y', d => isHorizontal ? x(d[1]) : y(d[1]))
-            .attr(isHorizontal ? 'width' : 'height', d => isHorizontal ? width - x(d[1]) : height - y(d[1]))
+            .attr(isHorizontal ? 'y' : 'x', d => isHorizontal ? y(d.key) : x(d.key))
+            .attr(isHorizontal ? 'x' : 'y', d => isHorizontal ? x(d.value) : y(d.value))
+            .attr(isHorizontal ? 'width' : 'height', d => isHorizontal ? width - x(d.value) : height - y(d.value))
             .attr(isHorizontal ? 'height' : 'width', y.bandwidth());
 
         g.append('text').attr('class', 'axis-label').attr('x', width / 2).attr('y', height + margin.bottom)
@@ -83,33 +83,33 @@ document.addEventListener('DOMContentLoaded', function() {
         
         let annotations = [];
 
-        if (currentScene === 1) {
-            const maxType = d3.max(data, d => d[1]);
-            const maxData = data.filter(d => d[1] === maxType)[0];
+        if (g.node().parentNode.id === 'scene1') {
+            const maxType = d3.max(data, d => d.value);
+            const maxData = data.filter(d => d.value === maxType)[0];
             annotations.push({
-                note: { label: `Most common: ${maxData[0]} (${maxType})`, title: "Key Insight" },
-                x: isHorizontal ? x(maxType) + 5 : x(maxData[0]) + x.bandwidth() / 2,
-                y: isHorizontal ? y(maxData[0]) + y.bandwidth() / 2 : y(maxType) - 5,
+                note: { label: `Most common: ${maxData.key} (${maxType})`, title: "Key Insight" },
+                x: isHorizontal ? x(maxType) + 5 : x(maxData.key) + x.bandwidth() / 2,
+                y: isHorizontal ? y(maxData.key) + y.bandwidth() / 2 : y(maxType) - 5,
                 dx: 10,
                 dy: -10
             });
-        } else if (currentScene === 2) {
-            const maxRange = d3.max(data, d => d.range);
-            const maxData = data.filter(d => d.range === maxRange)[0];
+        } else if (g.node().parentNode.id === 'scene2') {
+            const maxRange = d3.max(data, d => d.value);
+            const maxData = data.filter(d => d.value === maxRange)[0];
             annotations.push({
-                note: { label: `Longest range: ${maxData.model} (${maxRange} miles)`, title: "Key Insight" },
-                x: isHorizontal ? x(maxRange) + 5 : x(maxData.model) + x.bandwidth() / 2,
-                y: isHorizontal ? y(maxData.model) + y.bandwidth() / 2 : y(maxRange) - 5,
+                note: { label: `Longest range: ${maxData.key} (${maxRange} miles)`, title: "Key Insight" },
+                x: isHorizontal ? x(maxRange) + 5 : x(maxData.key) + x.bandwidth() / 2,
+                y: isHorizontal ? y(maxData.key) + y.bandwidth() / 2 : y(maxRange) - 5,
                 dx: 10,
                 dy: -10
             });
-        } else if (currentScene === 3) {
-            const maxMsrp = d3.max(data, d => d.msrp);
-            const maxData = data.filter(d => d.msrp === maxMsrp)[0];
+        } else if (g.node().parentNode.id === 'scene3') {
+            const maxMsrp = d3.max(data, d => d.value);
+            const maxData = data.filter(d => d.value === maxMsrp)[0];
             annotations.push({
-                note: { label: `Highest MSRP: ${maxData.model} ($${maxMsrp})`, title: "Key Insight" },
-                x: isHorizontal ? x(maxMsrp) + 5 : x(maxData.model) + x.bandwidth() / 2,
-                y: isHorizontal ? y(maxData.model) + y.bandwidth() / 2 : y(maxMsrp) - 5,
+                note: { label: `Highest MSRP: ${maxData.key} ($${maxMsrp})`, title: "Key Insight" },
+                x: isHorizontal ? x(maxMsrp) + 5 : x(maxData.key) + x.bandwidth() / 2,
+                y: isHorizontal ? y(maxData.key) + y.bandwidth() / 2 : y(maxMsrp) - 5,
                 dx: 10,
                 dy: -10
             });
