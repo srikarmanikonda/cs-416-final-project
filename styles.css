@@ -1,25 +1,102 @@
+/* Reset some basic elements */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-    font-family: Arial, sans-serif;
-}
-
-.narrative-section {
-    margin: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f8f9fa;
     padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
 }
 
+/* Header styles */
+header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    color: #007bff;
+}
+
+/* Main section styles */
+main {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* Narrative section styles */
+.narrative-section {
+    background: #fff;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.narrative-section h2 {
+    font-size: 1.75rem;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.narrative-section p {
+    margin-bottom: 10px;
+}
+
+.narrative-section ul {
+    margin: 10px 0 0 20px;
+}
+
+.narrative-section ul li {
+    margin-bottom: 5px;
+}
+
+/* Button styles */
+.buttons {
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;
+}
+
+button {
+    background: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background: #0056b3;
+}
+
+/* Visualization container styles */
 .visualization {
     width: 100%;
     height: 500px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
 }
 
+/* Bar chart styles */
 .bar {
-    fill: steelblue;
+    fill: #007bff;
 }
 
 .highlight {
-    fill: orange;
+    fill: #ff5733;
 }
 
 .axis-label {
