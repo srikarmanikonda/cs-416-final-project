@@ -1,38 +1,48 @@
 document.addEventListener('DOMContentLoaded', function() {
-    d3.csv('narrative_viz_electric_vehicles.csv').then(function(data) {
-        console.log('CSV data loaded successfully:', data);
-        
-        data.forEach(d => {
-            d['Electric Range'] = +d['Electric Range'] || 0; // Ensure numerical values and handle possible non-numeric entries
-            d['Base MSRP'] = +d['Base MSRP'] || 0;
-        });
+    // Hardcoded data for each chart
+    const vehicleTypesData = [
+        { key: 'Sedan', value: 120 },
+        { key: 'SUV', value: 80 },
+        { key: 'Truck', value: 40 },
+        { key: 'Coupe', value: 30 }
+    ];
 
-        renderVehicleTypes(data);
-        renderElectricRange(data);
-        renderBaseMsrp(data);
-    }).catch(function(error) {
-        console.error('Error loading the CSV file:', error);
-    });
+    const electricRangeData = [
+        { key: 'Model S', value: 370 },
+        { key: 'Model 3', value: 350 },
+        { key: 'Leaf', value: 226 },
+        { key: 'Bolt', value: 259 }
+    ];
+
+    const baseMsrpData = [
+        { key: 'Model S', value: 79990 },
+        { key: 'Model 3', value: 39990 },
+        { key: 'Leaf', value: 31990 },
+        { key: 'Bolt', value: 36990 }
+    ];
+
+    const scene1Viz = document.getElementById('vehicle-types-viz');
+    if (scene1Viz) renderVehicleTypes(vehicleTypesData);
+
+    const scene2Viz = document.getElementById('electric-range-viz');
+    if (scene2Viz) renderElectricRange(electricRangeData);
+
+    const scene3Viz = document.getElementById('base-msrp-viz');
+    if (scene3Viz) renderBaseMsrp(baseMsrpData);
 
     function renderVehicleTypes(data) {
         console.log('Rendering vehicle types');
-        
-        const vehicleTypesData = Array.from(d3.rollup(data, v => v.length, d => d['Electric Vehicle Type']), ([key, value]) => ({ key, value }));
-        createBarChart('#vehicle-types-viz', vehicleTypesData, 'Electric Vehicle Type', 'Count', false, 'Distribution of Electric Vehicle Types');
+        createBarChart('#vehicle-types-viz', data, 'Electric Vehicle Type', 'Count', false, 'Distribution of Electric Vehicle Types');
     }
 
     function renderElectricRange(data) {
         console.log('Rendering electric range');
-        
-        const electricRangeData = data.map(d => ({ key: d.Model, value: d['Electric Range'] }));
-        createBarChart('#electric-range-viz', electricRangeData, 'Model', 'Electric Range', true, 'Electric Range of Various Models');
+        createBarChart('#electric-range-viz', data, 'Model', 'Electric Range', true, 'Electric Range of Various Models');
     }
 
     function renderBaseMsrp(data) {
         console.log('Rendering base MSRP');
-        
-        const baseMsrpData = data.map(d => ({ key: d.Model, value: d['Base MSRP'] }));
-        createBarChart('#base-msrp-viz', baseMsrpData, 'Model', 'Base MSRP', true, 'Base MSRP of Electric Vehicles');
+        createBarChart('#base-msrp-viz', data, 'Model', 'Base MSRP', true, 'Base MSRP of Electric Vehicles');
     }
 
     function createBarChart(container, data, xLabel, yLabel, isHorizontal = false, title) {
@@ -62,8 +72,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         g.selectAll('.bar').data(data).enter().append('rect').attr('class', 'bar')
             .attr(isHorizontal ? 'y' : 'x', d => isHorizontal ? y(d.key) : x(d.key))
-            .attr(isHorizontal ? 'x' : 'y', d => isHorizontal ? x(d.value) : y(d.value))
-            .attr(isHorizontal ? 'width' : 'height', d => isHorizontal ? width - x(d.value) : height - y(d.value))
+            .attr(isHorizontal ? 'x' : 'y', d => isHorizontal ? x(0) : y(d.value))
+            .attr(isHorizontal ? 'width' : 'height', d => isHorizontal ? x(d.value) : height - y(d.value))
+            .attr(isHorizontal ? 'height' : 'width', y.bandwidth());
 
         g.append('text').attr('class', 'axis-label').attr('x', width / 2).attr('y', height + margin.bottom)
             .attr('dy', '-0.5em').style('text-anchor', 'middle').text(xLabel);
@@ -87,6 +98,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const maxData = data.filter(d => d.value === maxType)[0];
             annotations.push({
                 note: { label: `Most common: ${maxData.key} (${maxType})`, title: "Key Insight" },
+                x: isHorizontal ? x(maxType) + 5 : x(maxData.key) + x.bandwidth() / 2,
+                y: isHorizontal ? y(maxData.key) + y.bandwidth() / 2 : y(maxType) - 5,
                 dx: 10,
                 dy: -10
             });
@@ -95,6 +108,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const maxData = data.filter(d => d.value === maxRange)[0];
             annotations.push({
                 note: { label: `Longest range: ${maxData.key} (${maxRange} miles)`, title: "Key Insight" },
+                x: isHorizontal ? x(maxRange) + 5 : x(maxData.key) + x.bandwidth() / 2,
+                y: isHorizontal ? y(maxData.key) + y.bandwidth() / 2 : y(maxRange) - 5,
                 dx: 10,
                 dy: -10
             });
@@ -103,6 +118,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const maxData = data.filter(d => d.value === maxMsrp)[0];
             annotations.push({
                 note: { label: `Highest MSRP: ${maxData.key} ($${maxMsrp})`, title: "Key Insight" },
+                x: isHorizontal ? x(maxMsrp) + 5 : x(maxData.key) + x.bandwidth() / 2,
+                y: isHorizontal ? y(maxData.key) + y.bandwidth() / 2 : y(maxMsrp) - 5,
                 dx: 10,
                 dy: -10
             });
