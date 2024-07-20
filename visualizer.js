@@ -1,8 +1,9 @@
-const { annotation } = require("d3-svg-annotation");
 document.addEventListener('DOMContentLoaded', function() {
     let currentScene = 1;
 
     d3.csv('narrative_viz_electric_vehicles.csv').then(function(data) {
+        console.log('CSV data loaded successfully:', data);
+        
         data.forEach(d => {
             d['Electric Range'] = +d['Electric Range'];
             d['Base MSRP'] = +d['Base MSRP'];
@@ -18,6 +19,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     function loadScene(scene, data) {
+        console.log(`Loading scene ${scene}`);
+        
         const sceneContainer = d3.select('#scene-container');
         sceneContainer.html('');
         
@@ -33,25 +36,35 @@ document.addEventListener('DOMContentLoaded', function() {
             currentScene = 3;
             renderBaseMsrp(data);
             addNarrativeText(sceneContainer, "Base MSRP", "This scene shows the base MSRP of electric vehicles, highlighting the affordability and premium segments.");
+        } else {
+            console.error(`Unknown scene: ${scene}`);
         }
     }
 
     function renderVehicleTypes(data) {
+        console.log('Rendering vehicle types');
+        
         const vehicleTypesData = Array.from(d3.rollup(data, v => v.length, d => d['Electric Vehicle Type']));
         createBarChart('#scene-container', vehicleTypesData, 'Electric Vehicle Type', 'Count', false, 'Distribution of Electric Vehicle Types');
     }
 
     function renderElectricRange(data) {
+        console.log('Rendering electric range');
+        
         const electricRangeData = data.map(d => ({ model: d.Model, range: d['Electric Range'] }));
         createBarChart('#scene-container', electricRangeData, 'Model', 'Electric Range', true, 'Electric Range of Various Models');
     }
 
     function renderBaseMsrp(data) {
+        console.log('Rendering base MSRP');
+        
         const baseMsrpData = data.map(d => ({ model: d.Model, msrp: d['Base MSRP'] }));
         createBarChart('#scene-container', baseMsrpData, 'Model', 'Base MSRP', true, 'Base MSRP of Electric Vehicles');
     }
 
     function createBarChart(container, data, xLabel, yLabel, isHorizontal = false, title) {
+        console.log(`Creating bar chart: ${title}`);
+        
         const svg = d3.select(container).append('svg').attr('width', '100%').attr('height', '500px');
         const margin = { top: 20, right: 30, bottom: 40, left: 90 };
         const width = parseInt(svg.style('width')) - margin.left - margin.right;
@@ -75,8 +88,8 @@ document.addEventListener('DOMContentLoaded', function() {
         g.append('g').attr('class', 'y axis').call(d3.axisLeft(y));
 
         g.selectAll('.bar').data(data).enter().append('rect').attr('class', 'bar')
-            .attr(isHorizontal ? 'y' : 'x', d => x(isHorizontal ? d[1] : d[0]))
-            .attr(isHorizontal ? 'x' : 'y', d => y(isHorizontal ? d[0] : d[1]))
+            .attr(isHorizontal ? 'y' : 'x', d => isHorizontal ? y(d[0]) : x(d[0]))
+            .attr(isHorizontal ? 'x' : 'y', d => isHorizontal ? x(d[1]) : y(d[1]))
             .attr(isHorizontal ? 'width' : 'height', d => isHorizontal ? width - x(d[1]) : height - y(d[1]))
             .attr(isHorizontal ? 'height' : 'width', y.bandwidth());
 
@@ -93,6 +106,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function addAnnotations(g, data, x, y, isHorizontal) {
+        console.log('Adding annotations');
+        
         let annotations = [];
 
         if (currentScene === 1) {
@@ -132,6 +147,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function addNarrativeText(container, title, text) {
+        console.log(`Adding narrative text: ${title}`);
+        
         container.append('h2').text(title);
         container.append('p').text(text);
     }
