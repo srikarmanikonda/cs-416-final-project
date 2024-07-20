@@ -1,1 +1,34 @@
-<h1>Hello World!</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Electric Vehicles MARTINI Glass Narrative</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="visualizer.js" defer></script>
+</head>
+<body>
+    <h1>Electric Vehicles in Washington State</h1>
+    
+    <div class="narrative-section">
+        <h2>Introduction</h2>
+        <p>This narrative explores the distribution and characteristics of electric vehicles in Washington State based on the latest data.</p>
+        <p>Questions:</p>
+        <ul>
+            <li>What types of electric vehicles are most common?</li>
+            <li>What is the range of these vehicles?</li>
+            <li>What is the price range of these vehicles?</li>
+        </ul>
+    </div>
+    
+    <div class="narrative-section">
+        <button id="scene1-btn">Scene 1: Vehicle Types</button>
+        <button id="scene2-btn">Scene 2: Electric Range</button>
+        <button id="scene3-btn">Scene 3: Base MSRP</button>
+    </div>
+    
+    <div class="narrative-section">
+        <div id="scene-container" class="visualization"></div>
+    </div>
+</body>
+</html>

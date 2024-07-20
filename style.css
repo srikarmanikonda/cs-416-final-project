@@ -1,0 +1,28 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.narrative-section {
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.visualization {
+    width: 100%;
+    height: 500px;
+}
+
+.bar {
+    fill: steelblue;
+}
+
+.highlight {
+    fill: orange;
+}
+
+.axis-label {
+    font-size: 12px;
+    font-weight: bold;
+}
