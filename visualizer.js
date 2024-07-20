@@ -64,7 +64,6 @@ document.addEventListener('DOMContentLoaded', function() {
             .attr(isHorizontal ? 'y' : 'x', d => isHorizontal ? y(d.key) : x(d.key))
             .attr(isHorizontal ? 'x' : 'y', d => isHorizontal ? x(d.value) : y(d.value))
             .attr(isHorizontal ? 'width' : 'height', d => isHorizontal ? width - x(d.value) : height - y(d.value))
-            .attr(isHorizontal ? 'height' : 'width', y.bandwidth());
 
         g.append('text').attr('class', 'axis-label').attr('x', width / 2).attr('y', height + margin.bottom)
             .attr('dy', '-0.5em').style('text-anchor', 'middle').text(xLabel);
@@ -88,8 +87,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const maxData = data.filter(d => d.value === maxType)[0];
             annotations.push({
                 note: { label: `Most common: ${maxData.key} (${maxType})`, title: "Key Insight" },
-                x: isHorizontal ? x(maxType) + 5 : x(maxData.key) + x.bandwidth() / 2,
-                y: isHorizontal ? y(maxData.key) + y.bandwidth() / 2 : y(maxType) - 5,
                 dx: 10,
                 dy: -10
             });
@@ -98,8 +95,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const maxData = data.filter(d => d.value === maxRange)[0];
             annotations.push({
                 note: { label: `Longest range: ${maxData.key} (${maxRange} miles)`, title: "Key Insight" },
-                x: isHorizontal ? x(maxRange) + 5 : x(maxData.key) + x.bandwidth() / 2,
-                y: isHorizontal ? y(maxData.key) + y.bandwidth() / 2 : y(maxRange) - 5,
                 dx: 10,
                 dy: -10
             });
@@ -108,8 +103,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const maxData = data.filter(d => d.value === maxMsrp)[0];
             annotations.push({
                 note: { label: `Highest MSRP: ${maxData.key} ($${maxMsrp})`, title: "Key Insight" },
-                x: isHorizontal ? x(maxMsrp) + 5 : x(maxData.key) + x.bandwidth() / 2,
-                y: isHorizontal ? y(maxData.key) + y.bandwidth() / 2 : y(maxMsrp) - 5,
                 dx: 10,
                 dy: -10
             });
