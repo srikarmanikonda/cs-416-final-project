@@ -12,7 +12,6 @@ body {
     padding: 20px;
 }
 
-
 header {
     text-align: center;
     margin-bottom: 40px;
@@ -62,17 +61,18 @@ main {
     gap: 10px;
 }
 
-button {
+.buttons a {
     background: #007bff;
     color: #fff;
     border: none;
     padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
+    text-decoration: none;
     transition: background 0.3s ease;
 }
 
-button:hover {
+.buttons a:hover {
     background: #0056b3;
 }
 
@@ -84,6 +84,14 @@ button:hover {
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-top: 20px;
+}
+
+.scene {
+    display: none;
+}
+
+.scene:target {
+    display: block;
 }
 
 .bar {

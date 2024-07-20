@@ -1,6 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-    let currentScene = 1;
-
     d3.csv('narrative_viz_electric_vehicles.csv').then(function(data) {
         console.log('CSV data loaded successfully:', data);
         
@@ -9,63 +7,38 @@ document.addEventListener('DOMContentLoaded', function() {
             d['Base MSRP'] = +d['Base MSRP'];
         });
 
-        d3.select('#scene1-btn').on('click', () => loadScene(1, data));
-        d3.select('#scene2-btn').on('click', () => loadScene(2, data));
-        d3.select('#scene3-btn').on('click', () => loadScene(3, data));
-
-        loadScene(currentScene, data);
+        renderVehicleTypes(data);
+        renderElectricRange(data);
+        renderBaseMsrp(data);
     }).catch(function(error) {
         console.error('Error loading the CSV file:', error);
     });
-
-    function loadScene(scene, data) {
-        console.log(`Loading scene ${scene}`);
-        
-        const sceneContainer = d3.select('#scene-container');
-        sceneContainer.html('');
-        
-        if (scene === 1) {
-            currentScene = 1;
-            renderVehicleTypes(data);
-            addNarrativeText(sceneContainer, "Vehicle Types", "This scene shows the distribution of different types of electric vehicles in the dataset.");
-        } else if (scene === 2) {
-            currentScene = 2;
-            renderElectricRange(data);
-            addNarrativeText(sceneContainer, "Electric Range", "This scene illustrates the electric range of various electric vehicles.");
-        } else if (scene === 3) {
-            currentScene = 3;
-            renderBaseMsrp(data);
-            addNarrativeText(sceneContainer, "Base MSRP", "This scene shows the base MSRP of electric vehicles, highlighting the affordability and premium segments.");
-        } else {
-            console.error(`Unknown scene: ${scene}`);
-        }
-    }
 
     function renderVehicleTypes(data) {
         console.log('Rendering vehicle types');
         
         const vehicleTypesData = Array.from(d3.rollup(data, v => v.length, d => d['Electric Vehicle Type']));
-        createBarChart('#scene-container', vehicleTypesData, 'Electric Vehicle Type', 'Count', false, 'Distribution of Electric Vehicle Types');
+        createBarChart('#vehicle-types-viz', vehicleTypesData, 'Electric Vehicle Type', 'Count', false, 'Distribution of Electric Vehicle Types');
     }
 
     function renderElectricRange(data) {
         console.log('Rendering electric range');
         
         const electricRangeData = data.map(d => ({ model: d.Model, range: d['Electric Range'] }));
-        createBarChart('#scene-container', electricRangeData, 'Model', 'Electric Range', true, 'Electric Range of Various Models');
+        createBarChart('#electric-range-viz', electricRangeData, 'Model', 'Electric Range', true, 'Electric Range of Various Models');
     }
 
     function renderBaseMsrp(data) {
         console.log('Rendering base MSRP');
         
         const baseMsrpData = data.map(d => ({ model: d.Model, msrp: d['Base MSRP'] }));
-        createBarChart('#scene-container', baseMsrpData, 'Model', 'Base MSRP', true, 'Base MSRP of Electric Vehicles');
+        createBarChart('#base-msrp-viz', baseMsrpData, 'Model', 'Base MSRP', true, 'Base MSRP of Electric Vehicles');
     }
 
     function createBarChart(container, data, xLabel, yLabel, isHorizontal = false, title) {
         console.log(`Creating bar chart: ${title}`);
         
-        const svg = d3.select(container).append('svg').attr('width', '100%').attr('height', '500px');
+        const svg = d3.select(container).attr('width', '100%').attr('height', '500px');
         const margin = { top: 20, right: 30, bottom: 40, left: 90 };
         const width = parseInt(svg.style('width')) - margin.left - margin.right;
         const height = parseInt(svg.style('height')) - margin.top - margin.bottom;
@@ -144,12 +117,5 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const makeAnnotations = d3.annotation().annotations(annotations);
         g.append("g").attr("class", "annotation-group").call(makeAnnotations);
-    }
-
-    function addNarrativeText(container, title, text) {
-        console.log(`Adding narrative text: ${title}`);
-        
-        container.append('h2').text(title);
-        container.append('p').text(text);
     }
 });
