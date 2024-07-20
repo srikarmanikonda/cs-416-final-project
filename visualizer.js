@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function renderVehicleTypes(data) {
-        const vehicleTypesData = d3.rollup(data, v => v.length, d => d['Electric Vehicle Type']);
+        const vehicleTypesData = Array.from(d3.rollup(data, v => v.length, d => d['Electric Vehicle Type']));
         createBarChart('#scene-container', vehicleTypesData, 'Electric Vehicle Type', 'Count', false, 'Distribution of Electric Vehicle Types');
     }
 
@@ -85,10 +85,8 @@ document.addEventListener('DOMContentLoaded', function() {
         g.append('text').attr('class', 'axis-label').attr('transform', 'rotate(-90)')
             .attr('x', -height / 2).attr('y', -margin.left + 20).style('text-anchor', 'middle').text(yLabel);
 
-  
         g.append('text').attr('class', 'title').attr('x', width / 2).attr('y', -margin.top / 2)
             .attr('dy', '1em').style('text-anchor', 'middle').style('font-size', '16px').text(title);
-
 
         addAnnotations(g, data, x, y, isHorizontal);
     }
