@@ -1,3 +1,4 @@
+const { annotation } = require("d3-svg-annotation");
 document.addEventListener('DOMContentLoaded', function() {
     let currentScene = 1;
 
