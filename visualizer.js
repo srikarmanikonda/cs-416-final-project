@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    d3.csv('data.csv').then(data => {
+    d3.csv('narrative_viz_electric_vehicles.csv').then(data => {
         const vehicleTypesData = d3.nest()
             .key(d => d['Electric Vehicle Type'])
             .rollup(v => v.length)
