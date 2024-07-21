@@ -1,37 +1,37 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const data = [
-        { key: 'Sedan', value: 30, company: 'Company A' },
-        { key: 'SUV', value: 50, company: 'Company B' },
-        { key: 'Truck', value: 20, company: 'Company C' }
-    ];
+    d3.csv('data.csv').then(data => {
+        const vehicleTypesData = d3.nest()
+            .key(d => d['Electric Vehicle Type'])
+            .rollup(v => v.length)
+            .entries(data)
+            .map(d => ({ key: d.key, value: d.value }));
 
-    const rangeData = [
-        { key: 'Model X', value: 300 },
-        { key: 'Model Y', value: 280 },
-        { key: 'Model 3', value: 310 }
-    ];
+        const rangeData = data.map(d => ({
+            key: d.Model,
+            value: +d['Electric Range']
+        }));
 
-    const msrpData = [
-        { key: 'Model X', value: 80000 },
-        { key: 'Model Y', value: 60000 },
-        { key: 'Model 3', value: 40000 }
-    ];
+        const msrpData = data.map(d => ({
+            key: d.Model,
+            value: +d['Base MSRP']
+        }));
 
-    if (document.getElementById('vehicle-types-viz')) {
-        createBarChart('#vehicle-types-viz', data, 'Electric Vehicle Type', 'Count', false, 'Distribution of Electric Vehicle Types');
-    }
+        if (document.getElementById('vehicle-types-viz')) {
+            createBarChart('#vehicle-types-viz', vehicleTypesData, 'Electric Vehicle Type', 'Count', false, 'Distribution of Electric Vehicle Types');
+        }
 
-    if (document.getElementById('electric-range-viz')) {
-        createBarChart('#electric-range-viz', rangeData, 'Model', 'Electric Range', false, 'Electric Range of Various Models');
-    }
+        if (document.getElementById('electric-range-viz')) {
+            createBarChart('#electric-range-viz', rangeData, 'Model', 'Electric Range', false, 'Electric Range of Various Models');
+        }
 
-    if (document.getElementById('base-msrp-viz')) {
-        createBarChart('#base-msrp-viz', msrpData, 'Model', 'Base MSRP', false, 'Base MSRP of Electric Vehicles');
-    }
+        if (document.getElementById('base-msrp-viz')) {
+            createBarChart('#base-msrp-viz', msrpData, 'Model', 'Base MSRP', false, 'Base MSRP of Electric Vehicles');
+        }
+    });
 
     function createBarChart(container, data, xLabel, yLabel, isHorizontal = false, title) {
         const margin = { top: 50, right: 50, bottom: 50, left: 50 };
-        const width = 600 - margin.left - margin.right;
+        const width = 800 - margin.left - margin.right;
         const height = 400 - margin.top - margin.bottom;
 
         const svg = d3.select(container)
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .attr('y', d => y(d.value))
             .attr('width', x.bandwidth())
             .attr('height', d => height - y(d.value))
-            .attr('fill', d => color(d.company));
+            .attr('fill', d => color(d.key));
 
         svg.append('text')
             .attr('x', width / 2)
