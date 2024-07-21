@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
     const data = [
-        { key: 'Sedan', value: 30 },
-        { key: 'SUV', value: 50 },
-        { key: 'Truck', value: 20 }
+        { key: 'Sedan', value: 30, company: 'Company A' },
+        { key: 'SUV', value: 50, company: 'Company B' },
+        { key: 'Truck', value: 20, company: 'Company C' }
     ];
 
     const rangeData = [
@@ -22,11 +22,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     if (document.getElementById('electric-range-viz')) {
-        createBarChart('#electric-range-viz', rangeData, 'Model', 'Electric Range', true, 'Electric Range of Various Models');
+        createBarChart('#electric-range-viz', rangeData, 'Model', 'Electric Range', false, 'Electric Range of Various Models');
     }
 
     if (document.getElementById('base-msrp-viz')) {
-        createBarChart('#base-msrp-viz', msrpData, 'Model', 'Base MSRP', true, 'Base MSRP of Electric Vehicles');
+        createBarChart('#base-msrp-viz', msrpData, 'Model', 'Base MSRP', false, 'Base MSRP of Electric Vehicles');
     }
 
     function createBarChart(container, data, xLabel, yLabel, isHorizontal = false, title) {
@@ -60,6 +60,8 @@ document.addEventListener('DOMContentLoaded', function() {
         svg.append('g')
             .call(yAxis);
 
+        const color = d3.scaleOrdinal(d3.schemeCategory10);
+
         svg.selectAll('.bar')
             .data(data)
             .enter()
@@ -68,7 +70,8 @@ document.addEventListener('DOMContentLoaded', function() {
             .attr('x', d => x(d.key))
             .attr('y', d => y(d.value))
             .attr('width', x.bandwidth())
-            .attr('height', d => height - y(d.value));
+            .attr('height', d => height - y(d.value))
+            .attr('fill', d => color(d.company));
 
         svg.append('text')
             .attr('x', width / 2)
@@ -89,6 +92,5 @@ document.addEventListener('DOMContentLoaded', function() {
             .attr('text-anchor', 'middle')
             .style('font-size', '20px')
             .text(title);
-
     }
 });
