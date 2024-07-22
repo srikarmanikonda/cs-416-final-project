@@ -1,65 +1,56 @@
 document.addEventListener('DOMContentLoaded', function() {
-    d3.csv('narrative_viz_electric_vehicles.csv').then(data => {
-        const vehicleTypesData =
+    const vehicleTypesData = [
+        { key: 'SUV', value: 5 },
+        { key: 'Sedan', value: 5 },
+        { key: 'Hatchback', value: 3 },
+        { key: 'Truck', value: 2 },
+        { key: 'Coupe', value: 1 },
+        { key: 'Van', value: 1 }
+    ];
 
-        [
-            { key: 'SUV', value: 5 },
-            { key: 'Sedan', value: 5 },
-            { key: 'Hatchback', value: 3 },
-            { key: 'Truck', value: 2 },
-            { key: 'Coupe', value: 1 },
-            { key: 'Van', value: 1 }
-        ];
+    const rangeData = [
+        { model: 'Chevrolet Bolt EV', electricRange: 259, msrp: 36620 },
+        { model: 'Chevrolet Bolt EUV', electricRange: 247, msrp: 33995 },
+        { model: 'Ford Mustang Mach-E', electricRange: 300, msrp: 42500 },
+        { model: 'Hyundai Kona Electric', electricRange: 258, msrp: 37400 },
+        { model: 'Kia Niro EV', electricRange: 239, msrp: 39990 },
+        { model: 'Nissan Leaf', electricRange: 149, msrp: 31500 },
+        { model: 'Tesla Model 3', electricRange: 263, msrp: 39990 },
+        { model: 'Tesla Model S', electricRange: 396, msrp: 79990 },
+        { model: 'Tesla Model X', electricRange: 340, msrp: 89990 },
+        { model: 'Tesla Model Y', electricRange: 326, msrp: 49990 },
+        { model: 'Volkswagen ID.4', electricRange: 250, msrp: 39995 }
+    ];
 
-        const rangeData = [
-            { model: 'Chevrolet Bolt EV', electricRange: 259, msrp: 36620 },
-            { model: 'Chevrolet Bolt EUV', electricRange: 247, msrp: 33995 },
-            { model: 'Ford Mustang Mach-E', electricRange: 300, msrp: 42500 },
-            { model: 'Hyundai Kona Electric', electricRange: 258, msrp: 37400 },
-            { model: 'Kia Niro EV', electricRange: 239, msrp: 39990 },
-            { model: 'Nissan Leaf', electricRange: 149, msrp: 31500 },
-            { model: 'Tesla Model 3', electricRange: 263, msrp: 39990 },
-            { model: 'Tesla Model S', electricRange: 396, msrp: 79990 },
-            { model: 'Tesla Model X', electricRange: 340, msrp: 89990 },
-            { model: 'Tesla Model Y', electricRange: 326, msrp: 49990 },
-            { model: 'Volkswagen ID.4', electricRange: 250, msrp: 39995 }
-        ];
+    const msrpHardcodedData = [
+        { key: 'Chevrolet Bolt EV', value: 36620 },
+        { key: 'Chevrolet Bolt EUV', value: 33995 },
+        { key: 'Ford Mustang Mach-E', value: 42500 },
+        { key: 'Hyundai Kona Electric', value: 37400 },
+        { key: 'Kia Niro EV', value: 39990 },
+        { key: 'Nissan Leaf', value: 31500 },
+        { key: 'Tesla Model 3', value: 39990 },
+        { key: 'Tesla Model S', value: 79990 },
+        { key: 'Tesla Model X', value: 89990 },
+        { key: 'Tesla Model Y', value: 49990 },
+        { key: 'Volkswagen ID.4', value: 39995 }
+    ];
 
-        const msrpData = data.map(d => ({
-            key: d.Model,
-            value: +d['Base MSRP']
-        }));
+    if (document.getElementById('vehicle-types-viz')) {
+        createBarChart('#vehicle-types-viz', vehicleTypesData, 'Electric Vehicle Type', 'Count', false, 'Distribution of Electric Vehicle Types');
+    }
 
-        const msrpHardcodedData = [
-            { key: 'Chevrolet Bolt EV', value: 36620 },
-            { key: 'Chevrolet Bolt EUV', value: 33995 },
-            { key: 'Ford Mustang Mach-E', value: 42500 },
-            { key: 'Hyundai Kona Electric', value: 37400 },
-            { key: 'Kia Niro EV', value: 39990 },
-            { key: 'Nissan Leaf', value: 31500 },
-            { key: 'Tesla Model 3', value: 39990 },
-            { key: 'Tesla Model S', value: 79990 },
-            { key: 'Tesla Model X', value: 89990 },
-            { key: 'Tesla Model Y', value: 49990 },
-            { key: 'Volkswagen ID.4', value: 39995 }
-        ];
+    if (document.getElementById('electric-range-viz')) {
+        createScatterPlot('#electric-range-viz', rangeData, 'Base MSRP', 'Electric Range', 'Electric Range of Various Models');
+    }
 
-        if (document.getElementById('vehicle-types-viz')) {
-            createBarChart('#vehicle-types-viz', vehicleTypesData, 'Electric Vehicle Type', 'Count', false, 'Distribution of Electric Vehicle Types');
-        }
+    if (document.getElementById('base-msrp-viz')) {
+        createBarChart('#base-msrp-viz', msrpHardcodedData, 'Model', 'Base MSRP', false, 'Base MSRP of Electric Vehicles');
+    }
 
-        if (document.getElementById('electric-range-viz')) {
-            createBarChart('#electric-range-viz', rangeData, 'Model', 'Electric Range', false, 'Electric Range of Various Models');
-        }
-
-        if (document.getElementById('base-msrp-viz')) {
-            createBarChart('#base-msrp-viz', msrpHardcodedData, 'Model', 'Base MSRP', false, 'Base MSRP of Electric Vehicles');
-        }
-
-        if (document.getElementById('scatter-plot-viz')) {
-            createScatterPlot('#scatter-plot-viz', rangeData, 'Base MSRP', 'Electric Range', 'Electric Range vs. Base MSRP');
-        }
-    });
+    if (document.getElementById('scatter-plot-viz')) {
+        createScatterPlot('#scatter-plot-viz', rangeData, 'Base MSRP', 'Electric Range', 'Electric Range vs. Base MSRP');
+    }
 
     function createBarChart(container, data, xLabel, yLabel, isHorizontal = false, title) {
         const margin = { top: 50, right: 50, bottom: 50, left: 50 };
