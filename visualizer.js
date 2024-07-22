@@ -11,11 +11,19 @@ document.addEventListener('DOMContentLoaded', function() {
             { key: 'Van', value: 1 }
         ];
 
-        const rangeData = data.map(d => ({
-            model: d.Model,
-            electricRange: +d['Electric Range'],
-            msrp: +d['Base MSRP']
-        }));
+        const rangeData = [
+            { model: 'Chevrolet Bolt EV', electricRange: 259, msrp: 36620 },
+            { model: 'Chevrolet Bolt EUV', electricRange: 247, msrp: 33995 },
+            { model: 'Ford Mustang Mach-E', electricRange: 300, msrp: 42500 },
+            { model: 'Hyundai Kona Electric', electricRange: 258, msrp: 37400 },
+            { model: 'Kia Niro EV', electricRange: 239, msrp: 39990 },
+            { model: 'Nissan Leaf', electricRange: 149, msrp: 31500 },
+            { model: 'Tesla Model 3', electricRange: 263, msrp: 39990 },
+            { model: 'Tesla Model S', electricRange: 396, msrp: 79990 },
+            { model: 'Tesla Model X', electricRange: 340, msrp: 89990 },
+            { model: 'Tesla Model Y', electricRange: 326, msrp: 49990 },
+            { model: 'Volkswagen ID.4', electricRange: 250, msrp: 39995 }
+        ];
 
         const msrpData = data.map(d => ({
             key: d.Model,
