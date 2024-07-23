@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 
     const data = await d3.csv('narrative_viz_electric_vehicle.csv');
-    console.log('CSV Data:', data);
+    console.log('CSV Data entry:', data[0]);
 
     const filteredData = data.filter(d => {
         const csvMake = d.Make.toLowerCase();
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     const msrpData = filteredData.map(d => ({
         key: `${d.Make} ${d.Model}`,
-        value: +d['Base MSRP']
+        value: d.Base_MSRP
     }));
 
     console.log('MSRP Data:', msrpData);
