@@ -93,7 +93,6 @@ document.addEventListener('DOMContentLoaded', async function() {
     }, {});
 
 
-    console.log('Scatterplot Data:', scatterplotData);
 
 
     if (document.getElementById('vehicle-types-viz')) {
