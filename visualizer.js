@@ -52,7 +52,6 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 
     const data = await d3.csv('narrative_viz_electric_vehicle.csv');
-    console.log(data[0].Base_MSRP);
 
     const filteredData = data.filter(d => {
         const csvMake = d.Make.toLowerCase();
@@ -61,12 +60,10 @@ document.addEventListener('DOMContentLoaded', async function() {
             h.make.toLowerCase() === csvMake && 
             h.model.toLowerCase() === csvModel
         );
-        console.log(`Checking CSV Make: ${d.Make}, Model: ${d.Model} -> Match: ${isMatch}`);
-        return isMatch;
     });
 
     console.log('Filtered Data:', filteredData);
-
+    console.log(filteredData[0]['Base MSRP']);
     const msrpData = filteredData.map(d => ({
         key: `${d.Make} ${d.Model}`,
         value: +d['Base MSRP']
