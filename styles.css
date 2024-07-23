@@ -16,18 +16,29 @@ header nav {
     margin-top: 10px;
 }
 
-header nav a {
+header nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+}
+
+header nav ul li {
     margin: 0 10px;
+}
+
+header nav ul li a {
     padding: 10px 20px;
-    background-color: #007BFF;
-    color: white;
+    background-color: white;
+    color: black;
     text-decoration: none;
     border-radius: 5px;
     transition: background-color 0.3s;
 }
 
-header nav a:hover {
-    background-color: #0056b3;
+header nav ul li a:hover {
+    background-color: #ddd;
 }
 
 main {
@@ -72,19 +83,14 @@ ul {
     background-color: #0056b3;
 }
 
-.visualization {
-    display: block;
-    margin: 0 auto;
-}
-
-.zoom-controls {
+.buttons {
     text-align: center;
-    margin-bottom: 20px;
+    margin: 20px 0;
 }
 
-.zoom-controls button {
-    margin: 0 5px;
-    padding: 5px 10px;
+.buttons button {
+    margin: 0 10px;
+    padding: 10px 20px;
     background-color: #007BFF;
     color: white;
     border: none;
@@ -93,6 +99,11 @@ ul {
     transition: background-color 0.3s;
 }
 
-.zoom-controls button:hover {
+.buttons button:hover {
     background-color: #0056b3;
+}
+
+.visualization {
+    display: block;
+    margin: 0 auto;
 }
