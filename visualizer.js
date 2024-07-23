@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         { key: 'Van', value: 1 }
     ];
 
-    const rangeData = [
+    const rangeDataHardcoded = [
         { model: 'Chevrolet Bolt EV', brand: 'Chevrolet', electricRange: 259, msrp: 36620 },
         { model: 'Chevrolet Bolt EUV', brand: 'Chevrolet', electricRange: 247, msrp: 33995 },
         { model: 'Ford Mustang Mach-E', brand: 'Ford', electricRange: 300, msrp: 42500 },
@@ -79,12 +79,19 @@ document.addEventListener('DOMContentLoaded', async function() {
         value: vehicleTypeCounts[key]
     }));
 
-    const scatterplotData = filteredData.map(d => ({
+    const rangeData = filteredData.map(d => ({
         model: d['Model'],
         brand: d['Make'],
         electricRange: +d['Electric Range'],
         msrp: +d['Base MSRP']
     }));
+
+    const makeModelCounts = data.reduce((acc, d) => {
+        const key = `${d.make} ${d.model}`;
+        acc[key] = (acc[key] || 0) + 1;
+        return acc;
+    }, {});
+
 
     console.log('Scatterplot Data:', scatterplotData);
 
@@ -98,7 +105,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
 
     if (document.getElementById('base-msrp-viz')) {
-        createBarChart('#base-msrp-viz', msrpHardcodedData, 'Model', 'Base MSRP', 'Base MSRP of Electric Vehicles');
+        createBarChart('#base-msrp-viz', msrpData, 'Model', 'Base MSRP', 'Base MSRP of Electric Vehicles');
     }
 
     function createBarChart(container, data, xLabel, yLabel, title) {
@@ -325,6 +332,8 @@ document.addEventListener('DOMContentLoaded', async function() {
         const width = 800 - margin.left - margin.right;
         const height = 400 - margin.top - margin.bottom;
     
+ 
+    
         const svg = d3.select(container)
             .append('svg')
             .attr('width', width + margin.left + margin.right)
@@ -369,8 +378,8 @@ document.addEventListener('DOMContentLoaded', async function() {
             .attr('class', 'dot')
             .attr('cx', d => x(d.msrp))
             .attr('cy', d => y(d.electricRange))
-            .attr('r', 5)
-            .attr('fill', d => color(d.model))
+            .attr('r', d => Math.sqrt(makeModelCounts[`${d.brand} ${d.model}`]) * 5) // Adjust the size multiplier as needed
+            .attr('fill', d => color(`${d.brand} ${d.model}`))
             .on("mouseover", function(event, d) {
                 tooltip.transition()
                     .duration(200)
@@ -415,7 +424,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         const annotations = [
             {
                 note: {
-                    label: ` The most efficient car is : ${mostEfficientCar.model}`,
+                    label: `The most efficient car is: ${mostEfficientCar.model}`,
                     wrap: 200
                 },
                 connector: {
