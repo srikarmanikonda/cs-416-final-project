@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded',  async function() {
+document.addEventListener('DOMContentLoaded', async function() {
     const vehicleTypesData = [
         { key: 'SUV', value: 5 },
         { key: 'Sedan', value: 5 },
@@ -52,12 +52,20 @@ document.addEventListener('DOMContentLoaded',  async function() {
 
 
     const data = await d3.csv('narrative_viz_electric_vehicle.csv');
+    console.log('CSV Data:', data);
 
     const filteredData = data.filter(d => {
         const csvMake = d.Make.toLowerCase();
         const csvModel = d.Model.toLowerCase();
-    
+        const isMatch = hardcodedModelsArray.some(h => 
+            h.make.toLowerCase() === csvMake && 
+            h.model.toLowerCase() === csvModel
+        );
+        console.log(`Checking CSV Make: ${d.Make}, Model: ${d.Model} -> Match: ${isMatch}`);
+        return isMatch;
     });
+
+    console.log('Filtered Data:', filteredData);
 
     const msrpData = filteredData.map(d => ({
         key: `${d.Make} ${d.Model}`,
@@ -267,7 +275,7 @@ document.addEventListener('DOMContentLoaded',  async function() {
             {
                 note: {
                     label: 'Most common vehicle type',
-                    title: 'SUV',
+                    title: 'SUV ',
                     wrap: 200
                 },
                 connector: {
@@ -392,7 +400,7 @@ document.addEventListener('DOMContentLoaded',  async function() {
         const annotations = [
             {
                 note: {
-                    label: `The most efficient car is : ${mostEfficientCar.model}`,
+                    label: ` The most efficient car is : ${mostEfficientCar.model}`,
                     wrap: 200
                 },
                 connector: {
@@ -405,7 +413,7 @@ document.addEventListener('DOMContentLoaded',  async function() {
                 color: ["#000000"],
                 x: x(mostEfficientCar.msrp),
                 y: y(mostEfficientCar.electricRange),
-                dx: -70,
+                dx: 50,
                 dy: -50
             },
             {
@@ -423,7 +431,7 @@ document.addEventListener('DOMContentLoaded',  async function() {
                 color: ["#000000"],
                 x: x(leastEfficientCar.msrp),
                 y: y(leastEfficientCar.electricRange),
-                dx: 50,
+                dx: -50,
                 dy: 50
             }
         ];
