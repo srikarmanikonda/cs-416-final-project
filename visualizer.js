@@ -49,46 +49,46 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function createBarChart(container, data, xLabel, yLabel, title) {
-        const margin = { top: 60, right: 60, bottom: 100, left: 100 };
+        const margin = { top: 60, right: 100, bottom: 100, left: 100 };
         const width = 1000 - margin.left - margin.right;
         const height = 500 - margin.top - margin.bottom;
-    
+
         const svg = d3.select(container)
             .append('svg')
             .attr('width', width + margin.left + margin.right)
             .attr('height', height + margin.top + margin.bottom + 50)
             .append('g')
             .attr('transform', `translate(${margin.left}, ${margin.top})`);
-    
+
         const x = d3.scaleBand()
             .range([0, width])
             .domain(data.map(d => d.key))
             .padding(0.1);
-    
+
         const y = d3.scaleLinear()
             .range([height, 0])
             .domain([0, d3.max(data, d => d.value)]);
-    
+
         const xAxis = d3.axisBottom(x)
             .tickSize(0)
             .tickPadding(10);
-    
+
         const yAxis = d3.axisLeft(y)
-            .tickSize(-width)
+            .tickSize(0)
             .tickPadding(10);
-    
+
         svg.append('g')
             .attr('transform', `translate(0, ${height})`)
             .call(xAxis)
             .selectAll('text')
             .attr('transform', 'rotate(-45)')
             .style('text-anchor', 'end');
-    
+
         svg.append('g')
             .call(yAxis);
-    
+
         const color = d3.scaleOrdinal(d3.schemeCategory10);
-    
+
         const tooltip = d3.select("body").append("div")
             .attr("class", "tooltip")
             .style("opacity", 0)
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .style("border", "1px solid black")
             .style("position", "absolute")
             .style("color", "black");
-    
+
         svg.selectAll('.bar')
             .data(data)
             .enter()
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .attr('fill', d => color(d.key))
             .on("mouseover", function(event, d) {
                 tooltip.transition()
-                    .duration(200)
+                    .duration(150)
                     .style("opacity", .9);
                 tooltip.html(`Model: ${d.key}<br>MSRP: $${d.value}`)
                     .style("left", (event.pageX + 5) + "px")
@@ -119,32 +119,32 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .on("mouseout", function(d) {
                 tooltip.transition()
-                    .duration(500)
+                    .duration(200)
                     .style("opacity", 0);
             });
-    
+
         svg.append('text')
             .attr('x', width / 2)
             .attr('y', height + 70)
             .attr('text-anchor', 'middle')
             .text(xLabel);
-    
+
         svg.append('text')
             .attr('transform', 'rotate(-90)')
             .attr('x', -height / 2)
             .attr('y', -60)
             .attr('text-anchor', 'middle')
             .text(yLabel);
-    
+
         svg.append('text')
             .attr('x', width / 2)
             .attr('y', -20)
             .attr('text-anchor', 'middle')
             .style('font-size', '20px')
             .text(title);
-    
+
         const averagePrice = d3.mean(data, d => d.value);
-    
+
         svg.append("line")
             .attr("x1", 0)
             .attr("y1", y(averagePrice))
@@ -152,27 +152,28 @@ document.addEventListener('DOMContentLoaded', function() {
             .attr("y2", y(averagePrice))
             .attr("stroke", "black")
             .attr("stroke-dasharray", "4");
-    
+
         svg.append('text')
-            .attr('x', width - 10)
-            .attr('y', y(averagePrice) - 10)
-            .attr('text-anchor', 'end')
+            .attr('x', width + 10)
+            .attr('y', y(averagePrice))
+            .attr('text-anchor', 'start')
+            .style('font-size', '12px')
             .text('Average MSRP');
     }
     
 
-  
     function createPieChart(container, data, title) {
         const width = 800;
         const height = 450;
         const radius = Math.min(width, height) / 2;
+        const pieChartOffsetY = 50; 
     
         const svg = d3.select(container)
             .append('svg')
             .attr('width', width)
-            .attr('height', height + 50)
+            .attr('height', height + pieChartOffsetY)
             .append('g')
-            .attr('transform', `translate(${width / 2}, ${(height / 2) })`);
+            .attr('transform', `translate(${width / 2}, ${(height / 2) + pieChartOffsetY})`);
     
         const color = d3.scaleOrdinal(d3.schemeCategory10);
     
@@ -244,10 +245,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     end: "arrow"
                 },
                 color: ["#000000"],
-                x: width / 2 - 50,
-                y: -height / 2 + 50 + 50,
-                dx: 50,
-                dy: -50
+                x: width / 2 - 10,
+                y: -height / 2 + pieChartOffsetY + 10,
+                dx: -80,
+                dy: -10
             },
             {
                 note: {
@@ -259,10 +260,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     end: "arrow"
                 },
                 color: ["#000000"],
-                x: -width / 2 + 50,
-                y: height / 2 + 50 - 50,
-                dx: -50,
-                dy: 50
+                x: -width / 2 + 40,
+                y: height / 2 + pieChartOffsetY - 120,
+                dx: 80,
+                dy: -20
             }
         ];
     
@@ -284,34 +285,34 @@ document.addEventListener('DOMContentLoaded', function() {
         const margin = { top: 50, right: 50, bottom: 50, left: 50 };
         const width = 800 - margin.left - margin.right;
         const height = 400 - margin.top - margin.bottom;
-
+    
         const svg = d3.select(container)
             .append('svg')
             .attr('width', width + margin.left + margin.right)
             .attr('height', height + margin.top + margin.bottom)
             .append('g')
             .attr('transform', `translate(${margin.left}, ${margin.top})`);
-
+    
         const x = d3.scaleLinear()
             .range([0, width])
             .domain([0, d3.max(data, d => d.msrp)]);
-
+    
         const y = d3.scaleLinear()
             .range([height, 0])
             .domain([0, d3.max(data, d => d.electricRange)]);
-
+    
         const xAxis = d3.axisBottom(x);
         const yAxis = d3.axisLeft(y);
-
+    
         svg.append('g')
             .attr('transform', `translate(0, ${height})`)
             .call(xAxis);
-
+    
         svg.append('g')
             .call(yAxis);
-
+    
         const color = d3.scaleOrdinal(d3.schemeCategory10);
-
+    
         const tooltip = d3.select("body").append("div")
             .attr("class", "tooltip")
             .style("opacity", 0)
@@ -321,7 +322,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .style("border", "1px solid black")
             .style("position", "absolute")
             .style("color", "black");
-
+    
         svg.selectAll('.dot')
             .data(data)
             .enter()
@@ -344,25 +345,86 @@ document.addEventListener('DOMContentLoaded', function() {
                     .duration(500)
                     .style("opacity", 0);
             });
-
+    
         svg.append('text')
             .attr('x', width / 2)
             .attr('y', height + 40)
             .attr('text-anchor', 'middle')
             .text(xLabel);
-
+    
         svg.append('text')
             .attr('transform', 'rotate(-90)')
             .attr('x', -height / 2)
             .attr('y', -40)
             .attr('text-anchor', 'middle')
             .text(yLabel);
-
+    
         svg.append('text')
             .attr('x', width / 2)
             .attr('y', -10)
             .attr('text-anchor', 'middle')
             .style('font-size', '20px')
             .text(title);
+    
+        data.forEach(d => {
+            d.efficiency = d.msrp / d.electricRange;
+        });
+    
+        const mostEfficientCar = data.reduce((prev, curr) => (prev.efficiency < curr.efficiency ? prev : curr));
+        const leastEfficientCar = data.reduce((prev, curr) => (prev.efficiency > curr.efficiency ? prev : curr));
+    
+        const annotations = [
+            {
+                note: {
+                    label: `Most Efficient: ${mostEfficientCar.model}`,
+                    title: 'Highest Efficiency',
+                    wrap: 200
+                },
+                connector: {
+                    end: "arrow"
+                },
+                subject: {
+                    radius: 10,
+                    radiusPadding: 5
+                },
+                color: ["#000000"],
+                x: x(mostEfficientCar.msrp),
+                y: y(mostEfficientCar.electricRange),
+                dx: 50,
+                dy: -50
+            },
+            {
+                note: {
+                    label: `Least Efficient: ${leastEfficientCar.model}`,
+                    title: 'Lowest Efficiency',
+                    wrap: 200
+                },
+                connector: {
+                    end: "arrow"
+                },
+                subject: {
+                    radius: 10,
+                    radiusPadding: 5
+                },
+                color: ["#000000"],
+                x: x(leastEfficientCar.msrp),
+                y: y(leastEfficientCar.electricRange),
+                dx: -50,
+                dy: 50
+            }
+        ];
+    
+        const makeAnnotations = d3.annotation()
+            .annotations(annotations)
+            .type(d3.annotationCalloutCircle)
+            .accessors({
+                x: d => d.x,
+                y: d => d.y
+            });
+    
+        svg.append("g")
+            .attr("class", "annotation-group")
+            .call(makeAnnotations);
     }
+    
 });
