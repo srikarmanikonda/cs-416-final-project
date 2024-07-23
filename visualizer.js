@@ -54,13 +54,16 @@ document.addEventListener('DOMContentLoaded', async function() {
     const data = await d3.csv('narrative_viz_electric_vehicle.csv');
     console.log('CSV Data:', data);
 
-const hardcodedModelsSet = new Set(hardcodedModelsArray.map(d => `${d.make} ${d.model}`));
+    const filteredData = data.filter (d => 
+        hardcodedModelsArray.some(hardcodedModel =>
+            d['Make'].toLowerCase() === hardcodedModel.make.toLowerCase() && 
+            d['Model'].toLowerCase() === hardcodedModel.model.toLowerCase()        )
+    )
 
-const msrpData = data
-    .filter(d => hardcodedModelsSet.has(`${d.Make} ${d.Model}`))
-    .map(d => ({
-        key: `${d.Make} ${d.Model}`,
-        value: +d['Base MSRP']
+    const msrpData = filteredData.map(d => ({
+        make: d['Make'],
+        model: d['Model'],
+        msrp: +d['Base MSRP']
     }));
 
 
