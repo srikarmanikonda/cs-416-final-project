@@ -79,10 +79,6 @@ ul {
     transition: background-color 0.3s;
 }
 
-.navigation a:hover {
-    background-color: #0056b3;
-}
-
 .buttons {
     text-align: center;
     margin: 20px 0;
@@ -90,17 +86,18 @@ ul {
 
 .buttons button {
     margin: 0 10px;
-    padding: 10px 20px;
-    background-color: #007BFF;
-    color: white;
-    border: none;
+    padding: 10px 15px; 
+    background-color: white;
+    color: black;
+    border: 2px solid gray; 
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .buttons button:hover {
-    background-color: #0056b3;
+    background-color: gray;
+    color: white; 
 }
 
 .visualization {

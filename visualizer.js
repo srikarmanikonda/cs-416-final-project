@@ -48,7 +48,93 @@ document.addEventListener('DOMContentLoaded', function() {
         createBarChart('#base-msrp-viz', msrpHardcodedData, 'Model', 'Base MSRP', false, 'Base MSRP of Electric Vehicles');
     }
 
- 
+    function createBarChart(container, data, xLabel, yLabel, isHorizontal = false, title) {
+        const margin = { top: 50, right: 50, bottom: 50, left: 50 };
+        const width = 800 - margin.left - margin.right;
+        const height = 400 - margin.top - margin.bottom;
+
+        const svg = d3.select(container)
+            .append('svg')
+            .attr('width', width + margin.left + margin.right)
+            .attr('height', height + margin.top + margin.bottom + 50)
+            .append('g')
+            .attr('transform', `translate(${margin.left}, ${margin.top})`);
+
+        const x = d3.scaleBand()
+            .range([0, width])
+            .domain(data.map(d => d.key))
+            .padding(0.1);
+
+        const y = d3.scaleLinear()
+            .range([height, 0])
+            .domain([0, d3.max(data, d => d.value)]);
+
+        const xAxis = d3.axisBottom(x);
+        const yAxis = d3.axisLeft(y);
+
+        svg.append('g')
+            .attr('transform', `translate(0, ${height})`)
+            .call(xAxis);
+
+        svg.append('g')
+            .call(yAxis);
+
+        const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+        const tooltip = d3.select("body").append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0)
+            .style("background-color", "white")
+            .style("padding", "10px")
+            .style("border-radius", "5px")
+            .style("border", "1px solid black")
+            .style("position", "absolute")
+            .style("color", "black");
+
+        svg.selectAll('.bar')
+            .data(data)
+            .enter()
+            .append('rect')
+            .attr('class', 'bar')
+            .attr('x', d => x(d.key))
+            .attr('y', d => y(d.value))
+            .attr('width', x.bandwidth())
+            .attr('height', d => height - y(d.value))
+            .attr('fill', d => color(d.key))
+            .on("mouseover", function(event, d) {
+                tooltip.transition()
+                    .duration(200)
+                    .style("opacity", .9);
+                tooltip.html(`Model: ${d.key}<br>MSRP: $${d.value}`)
+                    .style("left", (event.pageX + 5) + "px")
+                    .style("top", (event.pageY - 28) + "px");
+            })
+            .on("mouseout", function(d) {
+                tooltip.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+            });
+
+        svg.append('text')
+            .attr('x', width / 2)
+            .attr('y', height + 40)
+            .attr('text-anchor', 'middle')
+            .text(xLabel);
+
+        svg.append('text')
+            .attr('transform', 'rotate(-90)')
+            .attr('x', -height / 2)
+            .attr('y', -40)
+            .attr('text-anchor', 'middle')
+            .text(yLabel);
+
+        svg.append('text')
+            .attr('x', width / 2)
+            .attr('y', -10)
+            .attr('text-anchor', 'middle')
+            .style('font-size', '20px')
+            .text(title);
+    }
 
     function createPieChart(container, data, title) {
         const width = 800;
@@ -89,11 +175,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
         svg.append('text')
             .attr('x', 0)
-            .attr('y', -height / 2 + 40)
+            .attr('y', 0)
             .attr('text-anchor', 'middle')
             .style('font-size', '20px')
             .text(title);
-
 
         const tooltip = d3.select("body").append("div")
             .attr("class", "tooltip")
@@ -112,7 +197,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 .duration(500)
                 .style("opacity", 0);
         });
-
 
         const annotations = [
             {
@@ -164,38 +248,44 @@ document.addEventListener('DOMContentLoaded', function() {
         const margin = { top: 50, right: 50, bottom: 50, left: 50 };
         const width = 800 - margin.left - margin.right;
         const height = 400 - margin.top - margin.bottom;
-    
+
         const svg = d3.select(container)
             .append('svg')
             .attr('width', width + margin.left + margin.right)
             .attr('height', height + margin.top + margin.bottom)
             .append('g')
             .attr('transform', `translate(${margin.left}, ${margin.top})`);
-    
+
         const x = d3.scaleLinear()
             .range([0, width])
             .domain([0, d3.max(data, d => d.msrp)]);
-    
+
         const y = d3.scaleLinear()
             .range([height, 0])
             .domain([0, d3.max(data, d => d.electricRange)]);
-    
+
         const xAxis = d3.axisBottom(x);
         const yAxis = d3.axisLeft(y);
-    
+
         svg.append('g')
             .attr('transform', `translate(0, ${height})`)
             .call(xAxis);
-    
+
         svg.append('g')
             .call(yAxis);
-    
+
         const color = d3.scaleOrdinal(d3.schemeCategory10);
-    
+
         const tooltip = d3.select("body").append("div")
             .attr("class", "tooltip")
-            .style("opacity", 0);
-    
+            .style("opacity", 0)
+            .style("background-color", "white")
+            .style("padding", "10px")
+            .style("border-radius", "5px")
+            .style("border", "1px solid black")
+            .style("position", "absolute")
+            .style("color", "black");
+
         svg.selectAll('.dot')
             .data(data)
             .enter()
@@ -218,20 +308,20 @@ document.addEventListener('DOMContentLoaded', function() {
                     .duration(500)
                     .style("opacity", 0);
             });
-    
+
         svg.append('text')
             .attr('x', width / 2)
             .attr('y', height + 40)
             .attr('text-anchor', 'middle')
             .text(xLabel);
-    
+
         svg.append('text')
             .attr('transform', 'rotate(-90)')
             .attr('x', -height / 2)
             .attr('y', -40)
             .attr('text-anchor', 'middle')
             .text(yLabel);
-    
+
         svg.append('text')
             .attr('x', width / 2)
             .attr('y', -10)
@@ -239,5 +329,4 @@ document.addEventListener('DOMContentLoaded', function() {
             .style('font-size', '20px')
             .text(title);
     }
-    
 });
