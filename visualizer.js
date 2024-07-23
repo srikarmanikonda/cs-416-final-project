@@ -79,6 +79,15 @@ document.addEventListener('DOMContentLoaded', async function() {
         value: vehicleTypeCounts[key]
     }));
 
+    const scatterplotData = filteredData.map(d => ({
+        model: d['Model'],
+        brand: d['Make'],
+        electricRange: +d['Electric Range'],
+        msrp: +d['Base MSRP']
+    }));
+
+    console.log('Scatterplot Data:', scatterplotData);
+
 
     if (document.getElementById('vehicle-types-viz')) {
         createPieChart('#vehicle-types-viz', vehicleTypesData, 'Distribution of Electric Vehicle Types');
