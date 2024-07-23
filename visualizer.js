@@ -274,8 +274,8 @@ document.addEventListener('DOMContentLoaded', async function() {
         const annotations = [
             {
                 note: {
-                    label: 'Most common vehicle types',
-                    title: 'SUV and Sedan',
+                    label: 'Most common vehicle type',
+                    title: 'SUV',
                     wrap: 200
                 },
                 connector: {
