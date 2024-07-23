@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
     const vehicleTypesData = [
         { key: 'SUV', value: 5 },
         { key: 'Sedan', value: 5 },
@@ -36,6 +36,12 @@ document.addEventListener('DOMContentLoaded', function() {
         { key: 'Volkswagen ID.4', value: 39995 }
     ];
 
+    const data = await d3.csv('narrative_viz_electric_vehicle.csv');
+    const msrpData = data.map(d => ({
+        key: d.Model,
+        value: +d['Base MSRP']
+    }));
+
     if (document.getElementById('vehicle-types-viz')) {
         createPieChart('#vehicle-types-viz', vehicleTypesData, 'Distribution of Electric Vehicle Types');
     }
@@ -45,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     if (document.getElementById('base-msrp-viz')) {
-        createBarChart('#base-msrp-viz', msrpHardcodedData, 'Model', 'Base MSRP', 'Base MSRP of Electric Vehicles');
+        createBarChart('#base-msrp-viz', msrpData, 'Model', 'Base MSRP', 'Base MSRP of Electric Vehicles');
     }
 
     function createBarChart(container, data, xLabel, yLabel, title) {
@@ -245,10 +251,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     end: "arrow"
                 },
                 color: ["#000000"],
-                x: width / 2 - 10,
-                y: -height / 2 + pieChartOffsetY + 10,
-                dx: -80,
-                dy: -10
+                x: width / 2 - 20,
+                y: -height / 2 + pieChartOffsetY + 40,
+                dx: -100,
+                dy: 20
             },
             {
                 note: {
@@ -261,9 +267,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 color: ["#000000"],
                 x: -width / 2 + 40,
-                y: height / 2 + pieChartOffsetY - 120,
+                y: height / 2 + pieChartOffsetY - 100,
                 dx: 80,
-                dy: -20
+                dy: -60
             }
         ];
     
@@ -376,8 +382,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const annotations = [
             {
                 note: {
-                    label: `Most Efficient: ${mostEfficientCar.model}`,
-                    title: 'Highest Efficiency',
+                    label: `At a pretty good price: range ratio the most effective car is: ${mostEfficientCar.model}`,
                     wrap: 200
                 },
                 connector: {
@@ -395,8 +400,7 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             {
                 note: {
-                    label: `Least Efficient: ${leastEfficientCar.model}`,
-                    title: 'Lowest Efficiency',
+                    label: `The least efficient car is: ${leastEfficientCar.model}`,
                     wrap: 200
                 },
                 connector: {
