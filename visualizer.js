@@ -59,6 +59,8 @@ document.addEventListener('DOMContentLoaded', async function() {
         value: +d['Base MSRP']
     }));
 
+    console.log(msrpData);
+
 
     if (document.getElementById('vehicle-types-viz')) {
         createPieChart('#vehicle-types-viz', vehicleTypesData, 'Distribution of Electric Vehicle Types');
