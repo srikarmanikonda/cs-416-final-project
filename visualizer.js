@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded',  function() {
+document.addEventListener('DOMContentLoaded',  async function() {
     const vehicleTypesData = [
         { key: 'SUV', value: 5 },
         { key: 'Sedan', value: 5 },
@@ -51,15 +51,12 @@ document.addEventListener('DOMContentLoaded',  function() {
     ];
 
 
-    const data =  d3.csv('narrative_viz_electric_vehicle.csv');
+    const data = await d3.csv('narrative_viz_electric_vehicle.csv');
 
     const filteredData = data.filter(d => {
         const csvMake = d.Make.toLowerCase();
         const csvModel = d.Model.toLowerCase();
-        const isMatch = hardcodedModelsArray.some(h => 
-            h.make.toLowerCase() === csvMake && 
-            h.model.toLowerCase() === csvModel
-        );
+    
     });
 
     const msrpData = filteredData.map(d => ({
