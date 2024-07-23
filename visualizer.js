@@ -270,10 +270,10 @@ document.addEventListener('DOMContentLoaded', async function() {
                     end: "arrow"
                 },
                 color: ["#000000"],
-                x: width / 2 - 20,
-                y: -height / 2 + pieChartOffsetY + 40,
-                dx: -100,
-                dy: 20
+                x: 170, 
+                y: -140, 
+                dx: 100, 
+                dy: -50 
             },
             {
                 note: {
@@ -285,10 +285,10 @@ document.addEventListener('DOMContentLoaded', async function() {
                     end: "arrow"
                 },
                 color: ["#000000"],
-                x: -width / 2 + 40,
-                y: height / 2 + pieChartOffsetY - 100,
-                dx: 80,
-                dy: -60
+                x: -170, 
+                y: 150, 
+                dx: -200, 
+                dy: 50
             }
         ];
     
@@ -304,6 +304,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             .attr("class", "annotation-group")
             .call(makeAnnotations);
     }
+    
     
 
     function createScatterPlot(container, data, xLabel, yLabel, title) {
