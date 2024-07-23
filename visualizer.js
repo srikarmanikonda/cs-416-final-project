@@ -287,21 +287,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 dx: 100, 
                 dy: -50 
             },
-            {
-                note: {
-                    label: 'Least common vehicle types',
-                    title: 'Coupe and Van',
-                    wrap: 200
-                },
-                connector: {
-                    end: "arrow"
-                },
-                color: ["#000000"],
-                x: -170, 
-                y: 150, 
-                dx: -200, 
-                dy: 50
-            }
+          
         ];
     
         const makeAnnotations = d3.annotation()
