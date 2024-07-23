@@ -54,25 +54,17 @@ document.addEventListener('DOMContentLoaded', async function() {
     const data = await d3.csv('narrative_viz_electric_vehicle.csv');
     console.log('CSV Data:', data);
 
-    // const filteredData = data.filter(d => {
-    //     const csvMake = d.Make.toLowerCase();
-    //     const csvModel = d.Model.toLowerCase();
-    //     const isMatch = hardcodedModelsArray.some(h => 
-    //         h.make.toLowerCase() === csvMake && 
-    //         h.model.toLowerCase() === csvModel
-    //     );
-    //     console.log(`Checking CSV Make: ${d.Make}, Model: ${d.Model} -> Match: ${isMatch}`);
-    //     return isMatch;
-    // });
+const hardcodedModelsSet = new Set(hardcodedModelsArray.map(d => `${d.make} ${d.model}`));
 
-    // console.log('Filtered Data:', filteredData);
+const msrpData = data
+    .filter(d => hardcodedModelsSet.has(`${d.Make} ${d.Model}`))
+    .map(d => ({
+        key: `${d.Make} ${d.Model}`,
+        value: +d['Base MSRP']
+    }));
 
-    // const msrpData = filteredData.map(d => ({
-    //     key: `${d.Make} ${d.Model}`,
-    //     value: +d['Base MSRP']
-    // }));
 
-    // console.log('MSRP Data:', msrpData);
+    console.log('MSRP Data:', msrpData);
 
     if (document.getElementById('vehicle-types-viz')) {
         createPieChart('#vehicle-types-viz', vehicleTypesData, 'Distribution of Electric Vehicle Types');
