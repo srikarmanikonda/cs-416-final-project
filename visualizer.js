@@ -50,17 +50,29 @@ document.addEventListener('DOMContentLoaded', async function() {
         { make: 'Volkswagen', model: 'ID.4' }
     ];
 
+
     const data = await d3.csv('narrative_viz_electric_vehicle.csv');
-    const filteredData = data.filter(d => 
-        hardcodedModelsArray.some(h => h.make === d.Make && h.model === d.Model)
-    );
+    console.log('CSV Data:', data);
+
+    const filteredData = data.filter(d => {
+        const csvMake = d.Make.toLowerCase();
+        const csvModel = d.Model.toLowerCase();
+        const isMatch = hardcodedModelsArray.some(h => 
+            h.make.toLowerCase() === csvMake && 
+            h.model.toLowerCase() === csvModel
+        );
+        console.log(`Checking CSV Make: ${d.Make}, Model: ${d.Model} -> Match: ${isMatch}`);
+        return isMatch;
+    });
+
+    console.log('Filtered Data:', filteredData);
+
     const msrpData = filteredData.map(d => ({
         key: `${d.Make} ${d.Model}`,
         value: +d['Base MSRP']
     }));
 
-    console.log(msrpData);
-
+    console.log('MSRP Data:', msrpData);
 
     if (document.getElementById('vehicle-types-viz')) {
         createPieChart('#vehicle-types-viz', vehicleTypesData, 'Distribution of Electric Vehicle Types');
