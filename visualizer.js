@@ -397,7 +397,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         const annotations = [
             {
                 note: {
-                    label: `At a pretty good price: range ratio the most effective car is: ${mostEfficientCar.model}`,
+                    label: ` The most efficient car is : ${mostEfficientCar.model}`,
                     wrap: 200
                 },
                 connector: {
