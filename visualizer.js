@@ -37,21 +37,23 @@ document.addEventListener('DOMContentLoaded', async function() {
     ];
 
     const hardcodedModelsArray = [
-        'Chevrolet Bolt EV',
-        'Chevrolet Bolt EUV',
-        'Ford Mustang Mach-E',
-        'Hyundai Kona Electric',
-        'Kia Niro EV',
-        'Nissan Leaf',
-        'Tesla Model 3',
-        'Tesla Model S',
-        'Tesla Model X',
-        'Tesla Model Y',
-        'Volkswagen ID.4'
+        { make: 'Chevrolet', model: 'Bolt EV' },
+        { make: 'Chevrolet', model: 'Bolt EUV' },
+        { make: 'Ford', model: 'Mustang Mach-E' },
+        { make: 'Hyundai', model: 'Kona Electric' },
+        { make: 'Kia', model: 'Niro EV' },
+        { make: 'Nissan', model: 'Leaf' },
+        { make: 'Tesla', model: 'Model 3' },
+        { make: 'Tesla', model: 'Model S' },
+        { make: 'Tesla', model: 'Model X' },
+        { make: 'Tesla', model: 'Model Y' },
+        { make: 'Volkswagen', model: 'ID.4' }
     ];
 
     const data = await d3.csv('narrative_viz_electric_vehicle.csv');
-    const filteredData = data.filter(d => hardcodedModelsArray.includes(`${d.Make} ${d.Model}`));
+    const filteredData = data.filter(d => 
+        hardcodedModelsArray.some(h => h.make === d.Make && h.model === d.Model)
+    );
     const msrpData = filteredData.map(d => ({
         key: `${d.Make} ${d.Model}`,
         value: +d['Base MSRP']
