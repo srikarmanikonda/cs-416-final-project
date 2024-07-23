@@ -161,54 +161,64 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
 
+  
     function createPieChart(container, data, title) {
         const width = 800;
-        const height = 400;
+        const height = 450;
         const radius = Math.min(width, height) / 2;
-
+    
         const svg = d3.select(container)
             .append('svg')
             .attr('width', width)
-            .attr('height', height)
+            .attr('height', height + 50)
             .append('g')
-            .attr('transform', `translate(${width / 2}, ${height / 2})`);
-
+            .attr('transform', `translate(${width / 2}, ${(height / 2) })`);
+    
         const color = d3.scaleOrdinal(d3.schemeCategory10);
-
+    
         const pie = d3.pie()
             .value(d => d.value);
-
+    
         const arc = d3.arc()
             .innerRadius(0)
             .outerRadius(radius);
-
+    
         const arcs = svg.selectAll('.arc')
             .data(pie(data))
             .enter()
             .append('g')
             .attr('class', 'arc');
-
+    
         arcs.append('path')
             .attr('d', arc)
             .attr('fill', d => color(d.data.key));
-
+    
         arcs.append('text')
             .attr('transform', d => `translate(${arc.centroid(d)})`)
             .attr('dy', '0.35em')
             .attr('text-anchor', 'middle')
             .text(d => d.data.key);
-
-        svg.append('text')
-            .attr('x', 0)
-            .attr('y', -height / 2 + 20)
+    
+        const titleGroup = d3.select(container)
+            .select('svg')
+            .append('g')
+            .attr('transform', `translate(${width / 2}, 20)`);
+    
+        titleGroup.append('text')
             .attr('text-anchor', 'middle')
             .style('font-size', '20px')
             .text(title);
-
+    
         const tooltip = d3.select("body").append("div")
             .attr("class", "tooltip")
-            .style("opacity", 0);
-
+            .style("opacity", 0)
+            .style("background-color", "white")
+            .style("padding", "10px")
+            .style("border-radius", "5px")
+            .style("border", "1px solid black")
+            .style("position", "absolute")
+            .style("color", "black");
+    
         arcs.on("mouseover", function(event, d) {
             tooltip.transition()
                 .duration(200)
@@ -222,7 +232,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 .duration(500)
                 .style("opacity", 0);
         });
-
+    
         const annotations = [
             {
                 note: {
@@ -233,9 +243,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 connector: {
                     end: "arrow"
                 },
-                color: ["#E8336D"],
-                x: width / 2 + radius + 10,
-                y: -height / 2 + 20,
+                color: ["#000000"],
+                x: width / 2 - 50,
+                y: -height / 2 + 50 + 50,
                 dx: 50,
                 dy: -50
             },
@@ -248,14 +258,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 connector: {
                     end: "arrow"
                 },
-                color: ["#E8336D"],
-                x: -width / 2 - radius - 10,
-                y: height / 2 - 20,
+                color: ["#000000"],
+                x: -width / 2 + 50,
+                y: height / 2 + 50 - 50,
                 dx: -50,
                 dy: 50
             }
         ];
-
+    
         const makeAnnotations = d3.annotation()
             .annotations(annotations)
             .type(d3.annotationCallout)
@@ -263,11 +273,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 x: d => d.x,
                 y: d => d.y
             });
-
+    
         svg.append("g")
             .attr("class", "annotation-group")
             .call(makeAnnotations);
     }
+    
 
     function createScatterPlot(container, data, xLabel, yLabel, title) {
         const margin = { top: 50, right: 50, bottom: 50, left: 50 };
