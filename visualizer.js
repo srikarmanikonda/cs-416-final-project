@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     const msrpData = filteredData.map(d => ({
         key: `${d.Make} ${d.Model}`,
-        value: d.Base_MSRP
+        value: +d['Base MSRP']
     }));
 
     console.log('MSRP Data:', msrpData);
@@ -400,7 +400,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         const annotations = [
             {
                 note: {
-                    label: ` The most efficient car is : ${mostEfficientCar.model}`,
+                    label: `The most efficient car is : ${mostEfficientCar.model}`,
                     wrap: 200
                 },
                 connector: {
@@ -413,7 +413,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 color: ["#000000"],
                 x: x(mostEfficientCar.msrp),
                 y: y(mostEfficientCar.electricRange),
-                dx: 50,
+                dx: -70,
                 dy: -50
             },
             {
@@ -431,7 +431,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 color: ["#000000"],
                 x: x(leastEfficientCar.msrp),
                 y: y(leastEfficientCar.electricRange),
-                dx: -50,
+                dx: 50,
                 dy: 50
             }
         ];
