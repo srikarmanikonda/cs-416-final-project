@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', async function() {
-    const vehicleTypesData = [
+    const vehicleTypesDataHardcoded = [
         { key: 'SUV', value: 5 },
         { key: 'Sedan', value: 5 },
         { key: 'Hatchback', value: 3 },
@@ -65,6 +65,17 @@ const msrpData = data
 
 
     console.log('MSRP Data:', msrpData);
+
+    const vehicleTypeCounts = data.reduce((acc, d) => {
+        acc[d['Electric Vehicle Type']] = (acc[d['Electric Vehicle Type']] || 0) + 1;
+        return acc;
+    }, {});
+
+    const vehicleTypesData = Object.keys(vehicleTypeCounts).map(key => ({
+        key,
+        value: vehicleTypeCounts[key]
+    }));
+
 
     if (document.getElementById('vehicle-types-viz')) {
         createPieChart('#vehicle-types-viz', vehicleTypesData, 'Distribution of Electric Vehicle Types');
