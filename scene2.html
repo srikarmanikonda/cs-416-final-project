@@ -6,22 +6,32 @@
     <title>Scene 2: Electric Range</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="visualizer.js" ></script>
+    <script src="visualizer.js"></script>
 </head>
 <body>
     <header>
-        <h1>Electric Vehicles in Washington State</h1>
+        <h1>Srikar Manikonda - CS 416 Visualization</h1>
+        <nav>
+            <a href="index.html">Overview</a>
+            <a href="scene1.html">Vehicle Types</a>
+            <a href="scene2.html">Electric Range</a>
+            <a href="scene3.html">Base MSRP</a>
+        </nav>
     </header>
-    
+
     <main>
+        <div class="navigation">
+            <a href="scene1.html">Previous</a>
+            <a href="scene3.html">Next</a>
+        </div>
         <section id="scene2" class="narrative-section scene">
             <h2>Electric Range</h2>
             <p>This scene illustrates the electric range of various electric vehicles.</p>
-            <svg id="electric-range-viz" class="visualization" width="1000" height="500"></svg>
-            <div class="navigation">
-                <a href="scene1.html">Previous</a>
-                <a href="scene3.html">Next</a>
+            <div class="zoom-controls">
+                <button id="zoom-in">Zoom In</button>
+                <button id="zoom-out">Zoom Out</button>
             </div>
+            <svg id="electric-range-viz" class="visualization" width="1000" height="500"></svg>
         </section>
     </main>
 </body>

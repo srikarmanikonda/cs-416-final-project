@@ -9,17 +9,17 @@ document.addEventListener('DOMContentLoaded', function() {
     ];
 
     const rangeData = [
-        { model: 'Chevrolet Bolt EV', electricRange: 259, msrp: 36620 },
-        { model: 'Chevrolet Bolt EUV', electricRange: 247, msrp: 33995 },
-        { model: 'Ford Mustang Mach-E', electricRange: 300, msrp: 42500 },
-        { model: 'Hyundai Kona Electric', electricRange: 258, msrp: 37400 },
-        { model: 'Kia Niro EV', electricRange: 239, msrp: 39990 },
-        { model: 'Nissan Leaf', electricRange: 149, msrp: 31500 },
-        { model: 'Tesla Model 3', electricRange: 263, msrp: 39990 },
-        { model: 'Tesla Model S', electricRange: 396, msrp: 79990 },
-        { model: 'Tesla Model X', electricRange: 340, msrp: 89990 },
-        { model: 'Tesla Model Y', electricRange: 326, msrp: 49990 },
-        { model: 'Volkswagen ID.4', electricRange: 250, msrp: 39995 }
+        { model: 'Chevrolet Bolt EV', brand: 'Chevrolet', electricRange: 259, msrp: 36620 },
+        { model: 'Chevrolet Bolt EUV', brand: 'Chevrolet', electricRange: 247, msrp: 33995 },
+        { model: 'Ford Mustang Mach-E', brand: 'Ford', electricRange: 300, msrp: 42500 },
+        { model: 'Hyundai Kona Electric', brand: 'Hyundai', electricRange: 258, msrp: 37400 },
+        { model: 'Kia Niro EV', brand: 'Kia', electricRange: 239, msrp: 39990 },
+        { model: 'Nissan Leaf', brand: 'Nissan', electricRange: 149, msrp: 31500 },
+        { model: 'Tesla Model 3', brand: 'Tesla', electricRange: 263, msrp: 39990 },
+        { model: 'Tesla Model S', brand: 'Tesla', electricRange: 396, msrp: 79990 },
+        { model: 'Tesla Model X', brand: 'Tesla', electricRange: 340, msrp: 89990 },
+        { model: 'Tesla Model Y', brand: 'Tesla', electricRange: 326, msrp: 49990 },
+        { model: 'Volkswagen ID.4', brand: 'Volkswagen', electricRange: 250, msrp: 39995 }
     ];
 
     const msrpHardcodedData = [
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
     ];
 
     if (document.getElementById('vehicle-types-viz')) {
-        createBarChart('#vehicle-types-viz', vehicleTypesData, 'Electric Vehicle Type', 'Count', false, 'Distribution of Electric Vehicle Types');
+        createPieChart('#vehicle-types-viz', vehicleTypesData, 'Distribution of Electric Vehicle Types');
     }
 
     if (document.getElementById('electric-range-viz')) {
@@ -52,69 +52,89 @@ document.addEventListener('DOMContentLoaded', function() {
         createScatterPlot('#scatter-plot-viz', rangeData, 'Base MSRP', 'Electric Range', 'Electric Range vs. Base MSRP');
     }
 
-    function createBarChart(container, data, xLabel, yLabel, isHorizontal = false, title) {
-        const margin = { top: 50, right: 50, bottom: 50, left: 50 };
-        const width = 800 - margin.left - margin.right;
-        const height = 400 - margin.top - margin.bottom;
+    function createPieChart(container, data, title) {
+        const width = 800;
+        const height = 400;
+        const radius = Math.min(width, height) / 2;
 
         const svg = d3.select(container)
             .append('svg')
-            .attr('width', width + margin.left + margin.right)
-            .attr('height', height + margin.top + margin.bottom)
+            .attr('width', width)
+            .attr('height', height)
             .append('g')
-            .attr('transform', `translate(${margin.left}, ${margin.top})`);
-
-        const x = d3.scaleBand()
-            .range([0, width])
-            .domain(data.map(d => d.key))
-            .padding(0.1);
-
-        const y = d3.scaleLinear()
-            .range([height, 0])
-            .domain([0, d3.max(data, d => d.value)]);
-
-        const xAxis = d3.axisBottom(x);
-        const yAxis = d3.axisLeft(y);
-
-        svg.append('g')
-            .attr('transform', `translate(0, ${height})`)
-            .call(xAxis);
-
-        svg.append('g')
-            .call(yAxis);
+            .attr('transform', `translate(${width / 2}, ${height / 2})`);
 
         const color = d3.scaleOrdinal(d3.schemeCategory10);
 
-        svg.selectAll('.bar')
-            .data(data)
+        const pie = d3.pie()
+            .value(d => d.value);
+
+        const arc = d3.arc()
+            .innerRadius(0)
+            .outerRadius(radius);
+
+        const arcs = svg.selectAll('.arc')
+            .data(pie(data))
             .enter()
-            .append('rect')
-            .attr('class', 'bar')
-            .attr('x', d => x(d.key))
-            .attr('y', d => y(d.value))
-            .attr('width', x.bandwidth())
-            .attr('height', d => height - y(d.value))
-            .attr('fill', d => color(d.key));
+            .append('g')
+            .attr('class', 'arc');
 
-        svg.append('text')
-            .attr('x', width / 2)
-            .attr('y', height + 40)
+        arcs.append('path')
+            .attr('d', arc)
+            .attr('fill', d => color(d.data.key));
+
+        arcs.append('text')
+            .attr('transform', d => `translate(${arc.centroid(d)})`)
+            .attr('dy', '0.35em')
             .attr('text-anchor', 'middle')
-            .text(xLabel);
+            .text(d => d.data.key);
 
         svg.append('text')
-            .attr('transform', 'rotate(-90)')
-            .attr('x', -height / 2)
-            .attr('y', -40)
-            .attr('text-anchor', 'middle')
-            .text(yLabel);
-
-        svg.append('text')
-            .attr('x', width / 2)
-            .attr('y', -10)
+            .attr('x', 0)
+            .attr('y', -height / 2 + 20)
             .attr('text-anchor', 'middle')
             .style('font-size', '20px')
             .text(title);
+
+        const annotations = [
+            {
+                note: {
+                    label: 'Most common vehicle types',
+                    title: 'SUV and Sedan',
+                    wrap: 200
+                },
+                connector: {
+                    end: "arrow"
+                },
+                color: ["#E8336D"],
+                x: arc.centroid(pie(data)[0])[0],
+                y: arc.centroid(pie(data)[0])[1],
+                dx: 50,
+                dy: -50
+            },
+            {
+                note: {
+                    label: 'Least common vehicle types',
+                    title: 'Coupe and Van',
+                    wrap: 200
+                },
+                connector: {
+                    end: "arrow"
+                },
+                color: ["#E8336D"],
+                x: arc.centroid(pie(data)[4])[0],
+                y: arc.centroid(pie(data)[4])[1],
+                dx: -50,
+                dy: 50
+            }
+        ];
+
+        const makeAnnotations = d3.annotation()
+            .annotations(annotations);
+
+        svg.append("g")
+            .attr("class", "annotation-group")
+            .call(makeAnnotations);
     }
 
     function createScatterPlot(container, data, xLabel, yLabel, title) {
@@ -166,7 +186,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 tooltip.transition()
                     .duration(200)
                     .style("opacity", .9);
-                tooltip.html(`Model: ${d.model}<br>MSRP: $${d.msrp}<br>Range: ${d.electricRange} miles`)
+                tooltip.html(`Model: ${d.model}<br>Brand: ${d.brand}<br>MSRP: $${d.msrp}<br>Range: ${d.electricRange} miles`)
                     .style("left", (event.pageX + 5) + "px")
                     .style("top", (event.pageY - 28) + "px");
             })
@@ -195,5 +215,27 @@ document.addEventListener('DOMContentLoaded', function() {
             .attr('text-anchor', 'middle')
             .style('font-size', '20px')
             .text(title);
+
+
+        const zoom = d3.zoom()
+            .scaleExtent([0.5, 5])
+            .on("zoom", zoomed);
+
+        svg.call(zoom);
+
+        function zoomed(event) {
+            svg.selectAll('circle')
+                .attr('transform', event.transform);
+            svg.selectAll('g')
+                .attr('transform', event.transform);
+        }
+
+        document.getElementById('zoom-in').addEventListener('click', function() {
+            zoom.scaleBy(svg.transition().duration(750), 1.3);
+        });
+
+        document.getElementById('zoom-out').addEventListener('click', function() {
+            zoom.scaleBy(svg.transition().duration(750), 1 / 1.3);
+        });
     }
 });
