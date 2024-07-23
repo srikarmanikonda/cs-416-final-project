@@ -52,7 +52,6 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 
     const data = await d3.csv('narrative_viz_electric_vehicle.csv');
-    console.log('CSV Data entry:', data[0]);
     console.log(data[0].Base_MSRP);
 
     const filteredData = data.filter(d => {
