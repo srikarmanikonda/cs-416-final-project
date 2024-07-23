@@ -36,11 +36,27 @@ document.addEventListener('DOMContentLoaded', async function() {
         { key: 'Volkswagen ID.4', value: 39995 }
     ];
 
+    const hardcodedModelsArray = [
+        'Chevrolet Bolt EV',
+        'Chevrolet Bolt EUV',
+        'Ford Mustang Mach-E',
+        'Hyundai Kona Electric',
+        'Kia Niro EV',
+        'Nissan Leaf',
+        'Tesla Model 3',
+        'Tesla Model S',
+        'Tesla Model X',
+        'Tesla Model Y',
+        'Volkswagen ID.4'
+    ];
+
     const data = await d3.csv('narrative_viz_electric_vehicle.csv');
-    const msrpData = data.map(d => ({
-        key: d.Model,
+    const filteredData = data.filter(d => hardcodedModelsArray.includes(`${d.Make} ${d.Model}`));
+    const msrpData = filteredData.map(d => ({
+        key: `${d.Make} ${d.Model}`,
         value: +d['Base MSRP']
     }));
+
 
     if (document.getElementById('vehicle-types-viz')) {
         createPieChart('#vehicle-types-viz', vehicleTypesData, 'Distribution of Electric Vehicle Types');
@@ -119,7 +135,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 tooltip.transition()
                     .duration(150)
                     .style("opacity", .9);
-                tooltip.html(`Model: ${d.key}<br>MSRP: $${d.value}`)
+                tooltip.html(`Make and Model: ${d.key}<br>MSRP: $${d.value}`)
                     .style("left", (event.pageX + 5) + "px")
                     .style("top", (event.pageY - 28) + "px");
             })
@@ -166,7 +182,6 @@ document.addEventListener('DOMContentLoaded', async function() {
             .style('font-size', '12px')
             .text('Average MSRP');
     }
-    
 
     function createPieChart(container, data, title) {
         const width = 800;

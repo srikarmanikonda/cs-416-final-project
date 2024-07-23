@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scene 2: Electric Range</title>
+    <title>Scene 2: Base MSRP</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.5.1/d3-annotation.min.js"></script>
-    <script src="visualizer.js"></script>
+    <script src="visualizer.js" defer></script>
 </head>
 <body>
     <header>
@@ -29,7 +29,10 @@
         </div>
         <section id="scene2" class="narrative-section scene">
             <h2>Base MSRP</h2>
-            <p>This scene shows the base MSRP of electric vehicles, highlighting the affordability and premium segments.</p>
+            <p>This scene shows a bar chart representing the base MSRP (Manufacturer's Suggested Retail Price) of various electric vehicle models. The chart highlights both the affordability and premium segments within the electric vehicle market.</p>
+            <p>Understanding the price range of electric vehicles is crucial as it directly impacts consumer adoption. Lower-priced models can make electric vehicles more accessible to a broader audience, while higher-priced models often come with advanced features and longer ranges.</p>
+            <p>The chart also includes a dotted line representing the average price of all the vehicles in the dataset. This average price line helps to contextualize where each vehicle stands in terms of cost, providing a quick visual reference for identifying which models are above or below the average price.</p>
+            <p>Including this information allows us to analyze the market positioning of different electric vehicle models and understand the economic factors influencing consumer choices.</p>
             <svg id="base-msrp-viz" class="visualization" width="1000" height="500"></svg>
         </section>
     </main>
