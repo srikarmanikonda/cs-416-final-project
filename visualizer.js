@@ -61,9 +61,8 @@ document.addEventListener('DOMContentLoaded', async function() {
     )
 
     const msrpData = filteredData.map(d => ({
-        make: d['Make'],
-        model: d['Model'],
-        msrp: +d['Base MSRP']
+       key: `${d['Make']} ${d['Model']}`,
+        value: +d['Base MSRP']
     }));
 
 
