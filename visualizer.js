@@ -378,7 +378,6 @@ document.addEventListener('DOMContentLoaded', async function() {
             .attr('class', 'dot')
             .attr('cx', d => x(d.msrp))
             .attr('cy', d => y(d.electricRange))
-            .attr('r', d => Math.sqrt(makeModelCounts[`${d.brand} ${d.model}`]) * 5) 
             .attr('fill', d => color(`${d.brand} ${d.model}`))
             .on("mouseover", function(event, d) {
                 tooltip.transition()
