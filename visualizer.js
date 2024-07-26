@@ -85,6 +85,8 @@ document.addEventListener('DOMContentLoaded', async function() {
         msrp: +d['Base MSRP']
     }));
 
+    console.log('Range Data:', rangeData);
+
     const makeModelCounts = data.reduce((acc, d) => {
         const key = `${d.make} ${d.model}`;
         acc[key] = (acc[key] || 0) + 1;
@@ -294,9 +296,9 @@ document.addEventListener('DOMContentLoaded', async function() {
         const annotations = [
             {
                 note: {
-                    label: 'Most common vehicle type',
-                    title: 'SUV ',
-                    wrap: 200
+                    label: 'Over three quarters of electric vehicles are battery-powered',
+                    title: 'Battery cars dominate',
+                    wrap: 100
                 },
                 connector: {
                     end: "arrow"
@@ -304,8 +306,8 @@ document.addEventListener('DOMContentLoaded', async function() {
                 color: ["#000000"],
                 x: 170, 
                 y: -140, 
-                dx: 100, 
-                dy: -50 
+                dx: 120,
+                dy: -70 
             },
           
         ];
@@ -376,7 +378,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             .attr('class', 'dot')
             .attr('cx', d => x(d.msrp))
             .attr('cy', d => y(d.electricRange))
-            .attr('r', d => Math.sqrt(makeModelCounts[`${d.brand} ${d.model}`]) * 5) // Adjust the size multiplier as needed
+            .attr('r', d => Math.sqrt(makeModelCounts[`${d.brand} ${d.model}`]) * 5) 
             .attr('fill', d => color(`${d.brand} ${d.model}`))
             .on("mouseover", function(event, d) {
                 tooltip.transition()
