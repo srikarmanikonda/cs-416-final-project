@@ -193,10 +193,11 @@ document.addEventListener('DOMContentLoaded', async function() {
         arcs.append('path')
             .attr('d', arc)
             .attr('fill', d => color(d.data.key));
-        arcs.append('text')
+            arcs.append('text')
             .attr('transform', d => `translate(${arc.centroid(d)})`)
-            .attr('dy', '0.35em')
+            .attr('dy', '0.2em')
             .attr('text-anchor', 'middle')
+            .style('font-size', '9px')  
             .text(d => d.data.key);
         const titleGroup = d3.select(container)
             .select('svg')
