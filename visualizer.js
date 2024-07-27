@@ -182,7 +182,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             .text('Average MSRP');
     }
     function createPieChart(container, data, title) {
-        const width = 800;
+        const width = 850;
         const height = 500;
         const radius = Math.min(width, height) / 2;
         const pieChartOffsetY = 50;
@@ -246,17 +246,16 @@ document.addEventListener('DOMContentLoaded', async function() {
                 note: {
                     label: 'Over three quarters of electric vehicles are battery-powered',
                     title: 'Battery cars dominate',
-                    wrap: 100,
+                    wrap: 200,
                     padding: 5, 
-                    align: 'left' 
                 },
                 connector: {
                     end: "arrow"
                 },
                 color: ["#000000"],
-                x: 250,
+                x: 100,
                 y: 40,
-                dx: 150,
+                dx: 100,
                 dy: -10,
             },
         ];
