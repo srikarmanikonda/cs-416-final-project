@@ -358,14 +358,14 @@ document.addEventListener('DOMContentLoaded', async function() {
                     end: "arrow"
                 },
                 subject: {
-                    radius: 10,
+                    radius: 5,
                     radiusPadding: 5
                 },
                 color: ["#000000"],
                 x: x(mostEfficientCar.msrp),
                 y: y(mostEfficientCar.electricRange),
-                dx: 50,
-                dy: -50
+                dx: -10,
+                dy: 30
             },
             {
                 note: {
