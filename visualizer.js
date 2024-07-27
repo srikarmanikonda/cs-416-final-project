@@ -67,12 +67,12 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     console.log('MSRP Data:', msrpData);
 
-    const vehicleTypeCounts = data.reduce((acc, d) => {
+    const vehicleTypeCounts = filteredData.reduce((acc, d) => {
         acc[d['Electric Vehicle Type']] = (acc[d['Electric Vehicle Type']] || 0) + 1;
         return acc;
     }, {});
 
-    const vehicleTypesData = filteredData.map(key => ({
+    const vehicleTypesData = Object.keys(vehicleTypeCounts).map(key => ({
         key,
         value: vehicleTypeCounts[key]
     }));
