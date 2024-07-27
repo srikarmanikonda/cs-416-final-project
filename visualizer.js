@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     }, {});
 
     const vehicleTypesData = Object.keys(vehicleTypeCounts)
-    .filter(key => key) // This filters out keys that are empty strings or undefined
+    .filter(key => key) 
     .map(key => ({
         key,
         value: vehicleTypeCounts[key]
@@ -290,7 +290,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 note: {
                     label: 'Over three quarters of electric vehicles are battery-powered',
                     title: 'Battery cars dominate',
-                    wrap: 200,
+                    wrap: 100,
                     padding: 5, 
                     align: 'left' 
                 },
@@ -299,13 +299,10 @@ document.addEventListener('DOMContentLoaded', async function() {
                 },
                 color: ["#000000"],
                 x: 250,
-                y: -140,
+                y: 40,
                 dx: 150,
-                dy: -50,
-                subject: {
-                    radius: 20,  
-                    radiusPadding: 10 
-                }
+                dy: -10,
+              
             },
         ];
         
