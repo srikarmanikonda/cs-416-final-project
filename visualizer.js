@@ -64,7 +64,6 @@ document.addEventListener('DOMContentLoaded', async function() {
         return acc;
     }, {});
     const vehicleTypesData = Object.keys(vehicleTypeCounts)
-    .filter(key => key) 
     .map(key => ({
         key,
         value: vehicleTypeCounts[key]
