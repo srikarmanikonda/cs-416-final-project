@@ -240,7 +240,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     end: "arrow"
                 },
                 color: ["#000000"],
-                x: 130,
+                x: 145,
                 y: 40,
                 dx: 110,
                 dy: -10,
