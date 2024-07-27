@@ -20,19 +20,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         { model: 'Tesla Model Y', brand: 'Tesla', electricRange: 326, msrp: 49990 },
         { model: 'Volkswagen ID.4', brand: 'Volkswagen', electricRange: 250, msrp: 39995 }
     ];
-    const msrpHardcodedData = [
-        { key: 'Chevrolet Bolt EV', value: 36620 },
-        { key: 'Chevrolet Bolt EUV', value: 33995 },
-        { key: 'Ford Mustang Mach-E', value: 42500 },
-        { key: 'Hyundai Kona Electric', value: 37400 },
-        { key: 'Kia Niro EV', value: 39990 },
-        { key: 'Nissan Leaf', value: 31500 },
-        { key: 'Tesla Model 3', value: 39990 },
-        { key: 'Tesla Model S', value: 79990 },
-        { key: 'Tesla Model X', value: 89990 },
-        { key: 'Tesla Model Y', value: 49990 },
-        { key: 'Volkswagen ID.4', value: 39995 }
-    ];
+
     const hardcodedModelsArray = [
         { make: 'Chevrolet', model: 'Bolt EV' },
         { make: 'Chevrolet', model: 'Bolt EUV' },
@@ -252,9 +240,9 @@ document.addEventListener('DOMContentLoaded', async function() {
                     end: "arrow"
                 },
                 color: ["#000000"],
-                x: 100,
+                x: 110,
                 y: 40,
-                dx: 100,
+                dx: 90,
                 dy: -10,
             },
         ];
