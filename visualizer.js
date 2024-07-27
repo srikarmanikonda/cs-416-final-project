@@ -50,21 +50,20 @@ document.addEventListener('DOMContentLoaded', async function() {
         { make: 'Volkswagen', model: 'ID.4' }
     ];
 
-
     const data = await d3.csv('narrative_viz_electric_vehicle.csv');
     console.log('CSV Data:', data);
 
-    const filteredData = data.filter (d => 
+    const filteredData = data.filter(d =>
         hardcodedModelsArray.some(hardcodedModel =>
-            d['Make'].toLowerCase() === hardcodedModel.make.toLowerCase() && 
-            d['Model'].toLowerCase() === hardcodedModel.model.toLowerCase()        )
-    )
+            d['Make'].toLowerCase() === hardcodedModel.make.toLowerCase() &&
+            d['Model'].toLowerCase() === hardcodedModel.model.toLowerCase()
+        )
+    );
 
     const msrpData = filteredData.map(d => ({
-       key: `${d['Make']} ${d['Model']}`,
+        key: `${d['Make']} ${d['Model']}`,
         value: +d['Base MSRP']
     }));
-
 
     console.log('MSRP Data:', msrpData);
 
@@ -87,15 +86,6 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     console.log('Range Data:', rangeData);
 
-    const makeModelCounts = data.reduce((acc, d) => {
-        const key = `${d.make} ${d.model}`;
-        acc[key] = (acc[key] || 0) + 1;
-        return acc;
-    }, {});
-
-
-
-
     if (document.getElementById('vehicle-types-viz')) {
         createPieChart('#vehicle-types-viz', vehicleTypesData, 'Distribution of Electric Vehicle Types');
     }
@@ -110,7 +100,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     function createBarChart(container, data, xLabel, yLabel, title) {
         const margin = { top: 60, right: 100, bottom: 100, left: 100 };
-        const width = 1000 - margin.left - margin.right;
+        const width = 1100 - margin.left - margin.right;
         const height = 500 - margin.top - margin.bottom;
 
         const svg = d3.select(container)
@@ -223,52 +213,52 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     function createPieChart(container, data, title) {
         const width = 800;
-        const height = 450;
+        const height = 500;
         const radius = Math.min(width, height) / 2;
-        const pieChartOffsetY = 50; 
-    
+        const pieChartOffsetY = 50;
+
         const svg = d3.select(container)
             .append('svg')
             .attr('width', width)
             .attr('height', height + pieChartOffsetY)
             .append('g')
             .attr('transform', `translate(${width / 2}, ${(height / 2) + pieChartOffsetY})`);
-    
+
         const color = d3.scaleOrdinal(d3.schemeCategory10);
-    
+
         const pie = d3.pie()
             .value(d => d.value);
-    
+
         const arc = d3.arc()
             .innerRadius(0)
             .outerRadius(radius);
-    
+
         const arcs = svg.selectAll('.arc')
             .data(pie(data))
             .enter()
             .append('g')
             .attr('class', 'arc');
-    
+
         arcs.append('path')
             .attr('d', arc)
             .attr('fill', d => color(d.data.key));
-    
+
         arcs.append('text')
             .attr('transform', d => `translate(${arc.centroid(d)})`)
             .attr('dy', '0.35em')
             .attr('text-anchor', 'middle')
             .text(d => d.data.key);
-    
+
         const titleGroup = d3.select(container)
             .select('svg')
             .append('g')
             .attr('transform', `translate(${width / 2}, 20)`);
-    
+
         titleGroup.append('text')
             .attr('text-anchor', 'middle')
             .style('font-size', '20px')
             .text(title);
-    
+
         const tooltip = d3.select("body").append("div")
             .attr("class", "tooltip")
             .style("opacity", 0)
@@ -278,7 +268,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             .style("border", "1px solid black")
             .style("position", "absolute")
             .style("color", "black");
-    
+
         arcs.on("mouseover", function(event, d) {
             tooltip.transition()
                 .duration(200)
@@ -292,26 +282,25 @@ document.addEventListener('DOMContentLoaded', async function() {
                 .duration(500)
                 .style("opacity", 0);
         });
-    
+
         const annotations = [
             {
                 note: {
                     label: 'Over three quarters of electric vehicles are battery-powered',
                     title: 'Battery cars dominate',
-                    wrap: 100
+                    wrap: 200
                 },
                 connector: {
                     end: "arrow"
                 },
                 color: ["#000000"],
-                x: 170, 
-                y: -140, 
-                dx: 120,
-                dy: -70 
+                x: 250,
+                y: -140,
+                dx: 150,
+                dy: -50
             },
-          
         ];
-    
+
         const makeAnnotations = d3.annotation()
             .annotations(annotations)
             .type(d3.annotationCallout)
@@ -319,48 +308,44 @@ document.addEventListener('DOMContentLoaded', async function() {
                 x: d => d.x,
                 y: d => d.y
             });
-    
+
         svg.append("g")
             .attr("class", "annotation-group")
             .call(makeAnnotations);
     }
-    
-    
 
     function createScatterPlot(container, data, xLabel, yLabel, title) {
         const margin = { top: 50, right: 50, bottom: 50, left: 50 };
-        const width = 800 - margin.left - margin.right;
-        const height = 400 - margin.top - margin.bottom;
-    
- 
-    
+        const width = 900 - margin.left - margin.right;
+        const height = 450 - margin.top - margin.bottom;
+
         const svg = d3.select(container)
             .append('svg')
             .attr('width', width + margin.left + margin.right)
             .attr('height', height + margin.top + margin.bottom)
             .append('g')
             .attr('transform', `translate(${margin.left}, ${margin.top})`);
-    
+
         const x = d3.scaleLinear()
             .range([0, width])
             .domain([0, d3.max(data, d => d.msrp)]);
-    
+
         const y = d3.scaleLinear()
             .range([height, 0])
             .domain([0, d3.max(data, d => d.electricRange)]);
-    
+
         const xAxis = d3.axisBottom(x);
         const yAxis = d3.axisLeft(y);
-    
+
         svg.append('g')
             .attr('transform', `translate(0, ${height})`)
             .call(xAxis);
-    
+
         svg.append('g')
             .call(yAxis);
-    
+
         const color = d3.scaleOrdinal(d3.schemeCategory10);
-    
+
         const tooltip = d3.select("body").append("div")
             .attr("class", "tooltip")
             .style("opacity", 0)
@@ -370,7 +355,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             .style("border", "1px solid black")
             .style("position", "absolute")
             .style("color", "black");
-    
+
         svg.selectAll('.dot')
             .data(data)
             .enter()
@@ -378,6 +363,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             .attr('class', 'dot')
             .attr('cx', d => x(d.msrp))
             .attr('cy', d => y(d.electricRange))
+            .attr('r', 5)
             .attr('fill', d => color(`${d.brand} ${d.model}`))
             .on("mouseover", function(event, d) {
                 tooltip.transition()
@@ -392,34 +378,34 @@ document.addEventListener('DOMContentLoaded', async function() {
                     .duration(500)
                     .style("opacity", 0);
             });
-    
+
         svg.append('text')
             .attr('x', width / 2)
             .attr('y', height + 40)
             .attr('text-anchor', 'middle')
             .text(xLabel);
-    
+
         svg.append('text')
             .attr('transform', 'rotate(-90)')
             .attr('x', -height / 2)
             .attr('y', -40)
             .attr('text-anchor', 'middle')
             .text(yLabel);
-    
+
         svg.append('text')
             .attr('x', width / 2)
             .attr('y', -10)
             .attr('text-anchor', 'middle')
             .style('font-size', '20px')
             .text(title);
-    
+
         data.forEach(d => {
             d.efficiency = d.msrp / d.electricRange;
         });
-    
+
         const mostEfficientCar = data.reduce((prev, curr) => (prev.efficiency < curr.efficiency ? prev : curr));
         const leastEfficientCar = data.reduce((prev, curr) => (prev.efficiency > curr.efficiency ? prev : curr));
-    
+
         const annotations = [
             {
                 note: {
@@ -458,7 +444,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 dy: 50
             }
         ];
-    
+
         const makeAnnotations = d3.annotation()
             .annotations(annotations)
             .type(d3.annotationCalloutCircle)
@@ -466,10 +452,10 @@ document.addEventListener('DOMContentLoaded', async function() {
                 x: d => d.x,
                 y: d => d.y
             });
-    
+
         svg.append("g")
             .attr("class", "annotation-group")
             .call(makeAnnotations);
     }
-    
+
 });
