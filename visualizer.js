@@ -175,7 +175,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         svg.append('text')
             .attr('x', width / 2)
-            .attr('y', height + 70)
+            .attr('y', height + 90)
             .attr('text-anchor', 'middle')
             .text(xLabel);
 
@@ -282,13 +282,14 @@ document.addEventListener('DOMContentLoaded', async function() {
                 .duration(500)
                 .style("opacity", 0);
         });
-
         const annotations = [
             {
                 note: {
                     label: 'Over three quarters of electric vehicles are battery-powered',
                     title: 'Battery cars dominate',
-                    wrap: 200
+                    wrap: 200,
+                    padding: 5, 
+                    align: 'left' 
                 },
                 connector: {
                     end: "arrow"
@@ -297,9 +298,14 @@ document.addEventListener('DOMContentLoaded', async function() {
                 x: 250,
                 y: -140,
                 dx: 150,
-                dy: -50
+                dy: -50,
+                subject: {
+                    radius: 20,  
+                    radiusPadding: 10 
+                }
             },
         ];
+        
 
         const makeAnnotations = d3.annotation()
             .annotations(annotations)
@@ -315,7 +321,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
 
     function createScatterPlot(container, data, xLabel, yLabel, title) {
-        const margin = { top: 50, right: 50, bottom: 50, left: 50 };
+        const margin = { top: 70, right: 70, bottom: 100, left: 100 }; 
         const width = 900 - margin.left - margin.right;
         const height = 450 - margin.top - margin.bottom;
 
