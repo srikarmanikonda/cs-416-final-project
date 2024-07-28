@@ -1,25 +1,4 @@
 document.addEventListener('DOMContentLoaded', async function() {
-    const vehicleTypesDataHardcoded = [
-        { key: 'SUV', value: 5 },
-        { key: 'Sedan', value: 5 },
-        { key: 'Hatchback', value: 3 },
-        { key: 'Truck', value: 2 },
-        { key: 'Coupe', value: 1 },
-        { key: 'Van', value: 1 }
-    ];
-    const rangeDataHardcoded = [
-        { model: 'Chevrolet Bolt EV', brand: 'Chevrolet', electricRange: 259, msrp: 36620 },
-        { model: 'Chevrolet Bolt EUV', brand: 'Chevrolet', electricRange: 247, msrp: 33995 },
-        { model: 'Ford Mustang Mach-E', brand: 'Ford', electricRange: 300, msrp: 42500 },
-        { model: 'Hyundai Kona Electric', brand: 'Hyundai', electricRange: 258, msrp: 37400 },
-        { model: 'Kia Niro EV', brand: 'Kia', electricRange: 239, msrp: 39990 },
-        { model: 'Nissan Leaf', brand: 'Nissan', electricRange: 149, msrp: 31500 },
-        { model: 'Tesla Model 3', brand: 'Tesla', electricRange: 263, msrp: 39990 },
-        { model: 'Tesla Model S', brand: 'Tesla', electricRange: 396, msrp: 79990 },
-        { model: 'Tesla Model X', brand: 'Tesla', electricRange: 340, msrp: 89990 },
-        { model: 'Tesla Model Y', brand: 'Tesla', electricRange: 326, msrp: 49990 },
-        { model: 'Volkswagen ID.4', brand: 'Volkswagen', electricRange: 250, msrp: 39995 }
-    ];
 
     const hardcodedModelsArray = [
         { make: 'Chevrolet', model: 'Bolt EV' },
@@ -46,7 +25,6 @@ document.addEventListener('DOMContentLoaded', async function() {
         key: `${d['Make']} ${d['Model']}`,
         value: +d['Base MSRP']
     }));
-    console.log('MSRP Data:', msrpData);
     const vehicleTypeCounts = data.reduce((acc, d) => {
         acc[d['Electric Vehicle Type']] = (acc[d['Electric Vehicle Type']] || 0) + 1;
         return acc;
@@ -62,7 +40,6 @@ document.addEventListener('DOMContentLoaded', async function() {
         electricRange: +d['Electric Range'],
         msrp: +d['Base MSRP']
     }));
-    console.log('Range Data:', rangeData);
     if (document.getElementById('vehicle-types-viz')) {
         createPieChart('#vehicle-types-viz', vehicleTypesData, 'Distribution of Electric Vehicle Types');
     }
@@ -72,6 +49,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     if (document.getElementById('base-msrp-viz')) {
         createBarChart('#base-msrp-viz', msrpData, 'Model', 'Base MSRP', 'Base MSRP of Electric Vehicles');
     }
+    
     function createBarChart(container, data, xLabel, yLabel, title) {
         const margin = { top: 60, right: 100, bottom: 100, left: 100 };
         const width = 1100 - margin.left - margin.right;
